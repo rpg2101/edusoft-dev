@@ -27,10 +27,9 @@ public class Lienzo extends Canvas {
     private Image texto1;
     private Image puntapapel;
     private Image basepapel;
-    private boolean modificaranchod;
-    private boolean modificaranchoi;
-    private boolean outi;
-    private boolean outd;
+    private boolean modificaranchod, modificaraltoup ;
+    private boolean modificaranchoi, modificaraltodown;
+    private boolean outi, outup, outdown, outd;
     private Rectangle rectangulo;
 
     @Override
@@ -42,13 +41,12 @@ public class Lienzo extends Canvas {
                 this.outd = false;
                 this.repaint();
             } else {
-                System.out.println("Estas ajuera");
+                System.out.println("Estas ajuera derecha");
                 this.outd = true;
                 this.getElem().elementAt(0).set(3, 350);
                 this.getElem().elementAt(1).set(3, 350);
                 this.repaint();
             }
-
         }
         if (modificaranchoi) {
             this.getElem().elementAt(2).set(1, x);
@@ -56,11 +54,19 @@ public class Lienzo extends Canvas {
             this.getElem().elementAt(3).set(1, x);
             this.getElem().elementAt(3).set(3, 450 - x);
             if (x > 100 && x < 800) {
+                this.outi = false;
+                this.repaint();
+            } else {
+                System.out.println("Seguis Afuera izquierda");
+                this.outi = true;
+                this.getElem().elementAt(2).set(1, 100);
+                this.getElem().elementAt(2).set(3, 350);
+                this.getElem().elementAt(3).set(1, 100);
+                this.getElem().elementAt(3).set(3, 350);
                 this.repaint();
             }
         }
         return true;
-
     }
 
     public Vector<Vector> getElem() {
@@ -105,13 +111,18 @@ public class Lienzo extends Canvas {
         aux4.add(350);
         aux4.add(125);
         elemento.add(aux4);
+        //Rectangulo auxiliar para interseccion
         rectangulo = new Rectangle(100, 150, 700, 250);
 
         this.setBackground(Color.LIGHT_GRAY);
         this.modificaranchod = false;
         this.modificaranchoi = false;
+        this.modificaraltoup = false;
+        this.modificaraltodown = false;
         this.outd = false;
         this.outi = false;
+        this.outup = false;
+        this.outdown = false;
     }
 
     @Override
@@ -177,7 +188,13 @@ public class Lienzo extends Canvas {
         }
         if (modificaranchoi) {
             this.modificaranchoi = false;
-            this.rectangulo.x = x;
+            //this.rectangulo.x = x;
+            if (outi) {
+                this.rectangulo.width = 700;
+                x = 100;
+            } else {
+                this.rectangulo.width = x - 100;
+            }
             Vector<Integer> aux = new Vector<Integer>();
             aux.add(1);
             aux.add(x);
@@ -196,6 +213,16 @@ public class Lienzo extends Canvas {
             if (Boolean.valueOf(this.rect(x, y).intersects(rectangulo))) {
                 if ((rectangulo.getX() - 5 < x) && (x < rectangulo.getX() + 5)) {
                     this.modificaranchoi = true;
+                }
+            }
+            if (Boolean.valueOf(this.rect(x, y).intersects(rectangulo))) {
+                if ((rectangulo.getMaxY() - 5 < y) && (y < rectangulo.getMaxY() + 5)) {
+                    this.modificaraltoup = true;
+                }
+            }
+            if (Boolean.valueOf(this.rect(x, y).intersects(rectangulo))) {
+                if ((rectangulo.getY() - 5 < y) && (y < rectangulo.getY() + 5)) {
+                    this.modificaraltodown = true;
                 }
             }
             return true;
