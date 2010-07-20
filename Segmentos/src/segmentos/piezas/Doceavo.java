@@ -12,16 +12,17 @@ import java.awt.RenderingHints;
 import java.awt.geom.Arc2D;
 import segmentos.Lienzo;
 
+
 /**
  *
  * @author curio
  */
-public class Medio extends Pieza {
+public class Doceavo extends Pieza {
 
-    public Medio(int x0, int y0, int elipse,int ainicial, Lienzo l){
-        super(x0,y0,elipse,ainicial,l);
-        setAngfinal(180);
-        setColor(Color.YELLOW);
+    public Doceavo(int x0, int y0, int elipse, int aini, Lienzo l){
+        super(x0,y0,elipse,aini,l);
+        setColor(Color.GREEN);
+        setAngfinal(30);
     }
 
     @Override
@@ -36,6 +37,7 @@ public class Medio extends Pieza {
                      RenderingHints.VALUE_ANTIALIAS_ON));
         g2.draw(new Arc2D.Float(getX(), getY(), getTamelipse(), getTamelipse(),
                 getAnginicial(), getAngfinal(), Arc2D.PIE));
-   }
+    }
+
 
 }

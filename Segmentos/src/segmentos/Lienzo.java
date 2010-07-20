@@ -13,8 +13,8 @@ import java.util.Iterator;
 
 import java.util.Vector;
 import javax.swing.JFrame;
-import segmentos.piezas.Medio;
-import segmentos.piezas.Pieza;
+import segmentos.piezas.*;
+
 
 /**
  *
@@ -26,20 +26,45 @@ public class Lienzo extends Canvas{
 
     public Lienzo(){
         piezas = new Vector();
-        piezas.add(new Medio(50,50,100,270,180,this));
-        piezas.add(new Medio(50,50,100,90,180,this));
-        piezas.add(new Medio(50,150,100,90,270,this));
-        piezas.add(new Medio(400,51,100,270,360,this));
-        JFrame frame = new JFrame();
-        frame.setBounds(0, 0, 1000, 1000);
-        frame.setResizable(false);
-        frame.setBackground(Color.GRAY);
-        this.setBounds(50, 50, 00, 1400);
-        this.setBackground(Color.LIGHT_GRAY);
-        frame.setTitle("Prueba");
-        frame.add(this);
-        frame.setVisible(true);
+        /*
+         *Genero las 35 Piezas 
+         */
+        int ainicial = 90;
+        /*for(int i=0;i<2;i++){
+            piezas.add(new Medio(100,50,150,ainicial,this));
+            ainicial=ainicial+180;
+        }
+        for(int i=0;i<3;i++){
+            piezas.add(new Tercio(300,50,150,ainicial,this));
+            ainicial=ainicial+120;
+        }
+        for(int i=0;i<4;i++){
+            piezas.add(new Cuarto(500,50,150,ainicial,this));
+            ainicial=ainicial+90;
+        }
+        for(int i=0;i<6;i++){
+            piezas.add(new Secto(100,200,150,ainicial,this));
+            ainicial=ainicial+60;
+        }
+        for(int i=0;i<8;i++){
+            piezas.add(new Octavo(300,200,150,ainicial,this));
+            ainicial=ainicial+45;
+        }*/
+        for(int i=0;i<12;i++){
+            piezas.add(new Doceavo(200,100,200,ainicial,this));
+            ainicial=ainicial+30;
+        }
         
+        JFrame frame = new JFrame();
+        frame.setBounds(0, 0, 1000, 700);
+        frame.setResizable(false);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setBackground(Color.LIGHT_GRAY);
+        this.setBounds(0, 0, 1000, 700);
+        this.setBackground(Color.LIGHT_GRAY);
+        frame.setTitle("Fracciones");
+        frame.add(this);
+        frame.setVisible(true);  
     }
 
     public Vector<Pieza> getPiezas(){
@@ -48,9 +73,15 @@ public class Lienzo extends Canvas{
 
     @Override
     public void paint (Graphics g){
+        g.drawRect(20, 50, 950, 280);
+
+        g.drawRect(20,350,227,300);
+        g.drawRect(262,350,227,300);
+        g.drawRect(503,350,227,300);
+        g.drawRect(745,350,227,300);
+
         Iterator p = piezas.iterator();
         while(p.hasNext()){
-            System.out.println("Pintando");
             Pieza segmento= (Pieza)p.next();
             segmento.pintarse(g);
         }

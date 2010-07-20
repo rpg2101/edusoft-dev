@@ -6,7 +6,9 @@
 package segmentos.piezas;
 
 import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics;
+import java.util.Vector;
 import segmentos.Lienzo;
 
 /**
@@ -19,31 +21,41 @@ public abstract class Pieza {
     private int tamelipse;
     private int anginicial;
     private int angfinal;
+    private Color color;
     private BasicStroke ancholinea;
     private Lienzo lienzo;
     
-    public Pieza(int x0, int y0, int elipse, int aini, int afinal,
-            Lienzo l){
+    public Pieza(int x0, int y0, int elipse, int aini, Lienzo l){
         x = x0;
         y = y0;
         tamelipse = elipse;
         anginicial = aini;
-        angfinal = afinal;
         lienzo = l;
         ancholinea = new BasicStroke(2.0f,BasicStroke.CAP_BUTT,
                 BasicStroke.JOIN_MITER);
-        
     }
 
+    public Pieza(int x0, int y0, int elipse, Lienzo l){
+        x = x0;
+        y = y0;
+        tamelipse = elipse;
+        anginicial = 90;
+        lienzo = l;
+        ancholinea = new BasicStroke(2.0f,BasicStroke.CAP_BUTT,
+                BasicStroke.JOIN_MITER);
+    }
+
+    /*
+     * Metodo implementado por cada pieza para pintarse
+     */
+    public abstract void pintarse(Graphics g);
+    
+    /*
+     * Metodo que cambia la posicion de una pieza
+     */
     protected void moverse(int posx, int posy){
         x = posx; y = posy;
         lienzo.repaint();
-    }
-
-    protected void rotar(int rotacion){
-        /*anginicial = getAnginicial()+rotacion;
-        angfinal = getAngfinal()+rotacion;
-        lienzo.repaint();*/
     }
 
     /**
@@ -88,10 +100,25 @@ public abstract class Pieza {
         return ancholinea;
     }
 
-    /*
-     * Metodo implementado por cada pieza para pintarse
+    /**
+     * @param color the color to set
      */
-    public abstract void pintarse(Graphics g);
-    
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    /**
+     * @return the color
+     */
+    public Color getColor() {
+        return color;
+    }
+
+    /**
+     * @param angfinal the angfinal to set
+     */
+    public void setAngfinal(int angfinal) {
+        this.angfinal = angfinal;
+    }
 
 }
