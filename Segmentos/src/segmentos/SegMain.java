@@ -9,11 +9,11 @@ package segmentos;
  *
  * @author curio
  */
-public class Main {
+public class SegMain {
 
     public static void main(String[] args){
         Lienzo l = new Lienzo();
-        
+        l.Repartir();
     }
 
 }

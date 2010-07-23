@@ -10,6 +10,7 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Iterator;
+import java.util.Random;
 
 import java.util.Vector;
 import javax.swing.JFrame;
@@ -23,14 +24,13 @@ import segmentos.piezas.*;
 public class Lienzo extends Canvas{
     
     private Vector<Pieza> piezas;
-
+    private Vector<Pieza> mesa;
     public Lienzo(){
         piezas = new Vector();
-        /*
-         *Genero las 35 Piezas 
-         */
+        mesa = new Vector();
+        //Genero las 35 Piezas
         int ainicial = 90;
-        /*for(int i=0;i<2;i++){
+        for(int i=0;i<2;i++){
             piezas.add(new Medio(100,50,150,ainicial,this));
             ainicial=ainicial+180;
         }
@@ -49,7 +49,7 @@ public class Lienzo extends Canvas{
         for(int i=0;i<8;i++){
             piezas.add(new Octavo(300,200,150,ainicial,this));
             ainicial=ainicial+45;
-        }*/
+        }
         for(int i=0;i<12;i++){
             piezas.add(new Doceavo(200,100,200,ainicial,this));
             ainicial=ainicial+30;
@@ -59,9 +59,8 @@ public class Lienzo extends Canvas{
         frame.setBounds(0, 0, 1000, 700);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setBackground(Color.LIGHT_GRAY);
-        this.setBounds(0, 0, 1000, 700);
-        this.setBackground(Color.LIGHT_GRAY);
+        this.setBounds(0, 0, 1008, 725);
+        this.setBackground(Color.WHITE);
         frame.setTitle("Fracciones");
         frame.add(this);
         frame.setVisible(true);  
@@ -69,6 +68,25 @@ public class Lienzo extends Canvas{
 
     public Vector<Pieza> getPiezas(){
         return piezas;
+    }
+    public Vector<Pieza> getMesa(){
+        return mesa;
+    }
+
+    /**
+     *  Este metodo sustrae 3 piezas aleatorias para ser puestas sobre la
+     * mesa de juego
+     */
+    public void Repartir(){
+        Random gene = new Random();
+        for(int i = mesa.size();i<3;i++){
+            Pieza tmp = piezas.remove(gene.nextInt(piezas.size()));
+            tmp.setX(150+(250*i));
+            tmp.setY(this.getHeight()/6);
+            this.addMouseListener(tmp);
+            this.addMouseMotionListener(tmp);
+            mesa.add(tmp);
+        }
     }
 
     @Override
@@ -80,7 +98,7 @@ public class Lienzo extends Canvas{
         g.drawRect(503,350,227,300);
         g.drawRect(745,350,227,300);
 
-        Iterator p = piezas.iterator();
+        Iterator p = mesa.iterator();
         while(p.hasNext()){
             Pieza segmento= (Pieza)p.next();
             segmento.pintarse(g);

@@ -8,24 +8,25 @@ package segmentos.piezas;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.Vector;
+import java.awt.Rectangle;
+import java.awt.event.MouseEvent;
+import javax.swing.event.MouseInputListener;
 import segmentos.Lienzo;
 
 /**
  *
  * @author Hector Rattis
  */
-public abstract class Pieza {
-    private int x;
-    private int y;
-    private int tamelipse;
-    private int anginicial;
-    private int angfinal;
+public abstract class Pieza implements MouseInputListener{
+    private int x, y, last_x, last_y;
+    private int tamelipse, anginicial, angfinal;
     private Color color;
     private BasicStroke ancholinea;
     private Lienzo lienzo;
+    private boolean pressout;
     
     public Pieza(int x0, int y0, int elipse, int aini, Lienzo l){
+        pressout = true;
         x = x0;
         y = y0;
         tamelipse = elipse;
@@ -35,27 +36,32 @@ public abstract class Pieza {
                 BasicStroke.JOIN_MITER);
     }
 
-    public Pieza(int x0, int y0, int elipse, Lienzo l){
-        x = x0;
-        y = y0;
-        tamelipse = elipse;
-        anginicial = 90;
-        lienzo = l;
-        ancholinea = new BasicStroke(2.0f,BasicStroke.CAP_BUTT,
-                BasicStroke.JOIN_MITER);
-    }
 
     /*
      * Metodo implementado por cada pieza para pintarse
      */
     public abstract void pintarse(Graphics g);
-    
-    /*
-     * Metodo que cambia la posicion de una pieza
-     */
-    protected void moverse(int posx, int posy){
-        x = posx; y = posy;
-        lienzo.repaint();
+    protected abstract Rectangle rect();
+
+
+    public void mouseEntered(MouseEvent me) {}
+    public void mouseExited(MouseEvent me) {}
+    public void mouseClicked(MouseEvent me) {}
+
+    public void mousePressed(MouseEvent me) {
+
+    }
+
+    public void mouseReleased(MouseEvent me) {
+
+    }
+
+    public void mouseDragged(MouseEvent me) {
+
+    }
+
+    public void mouseMoved(MouseEvent me) {
+
     }
 
     /**
@@ -119,6 +125,20 @@ public abstract class Pieza {
      */
     public void setAngfinal(int angfinal) {
         this.angfinal = angfinal;
+    }
+
+    /**
+     * @param x the x to set
+     */
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    /**
+     * @param y the y to set
+     */
+    public void setY(int y) {
+        this.y = y;
     }
 
 }
