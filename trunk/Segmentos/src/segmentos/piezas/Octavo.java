@@ -8,6 +8,7 @@ package segmentos.piezas;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.geom.Arc2D;
 import segmentos.Lienzo;
@@ -37,6 +38,11 @@ public class Octavo extends Pieza {
                      RenderingHints.VALUE_ANTIALIAS_ON));
         g2.draw(new Arc2D.Float(getX(), getY(), getTamelipse(), getTamelipse(),
                 getAnginicial(), getAngfinal(), Arc2D.PIE));
+    }
+
+    @Override
+    protected Rectangle rect() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 
