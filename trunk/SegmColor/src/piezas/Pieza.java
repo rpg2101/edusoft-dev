@@ -43,6 +43,7 @@ public abstract class Pieza {
     public abstract Rectangle rect();
 
     public void pintarse(Graphics2D g2) {
+        g2.draw(this.rect());
         g2.setColor(this.color);
         g2.fill(new Arc2D.Float(x, y, tamelipse, tamelipse, anginicial,
                 angfinal, Arc2D.PIE));
@@ -84,10 +85,10 @@ public abstract class Pieza {
 
     /**
      * @return the angfinal
-     */
+     
     public int getAngfinal() {
         return angfinal;
-    }
+    }*/
 
     /**
      * @return the ancholinea

@@ -39,31 +39,7 @@ public class Lienzo extends Canvas implements MouseInputListener {
         mesa = new Vector();
 
         //Genero las 35 Piezas
-        int ainicial = 90;
-        for (int i = 0; i < 2; i++) {
-            piezas.add(new Medio(100, 50, 150, ainicial, this));
-            ainicial = ainicial + 180;
-        }
-        for (int i = 0; i < 3; i++) {
-            piezas.add(new Tercio(300, 50, 150, ainicial, this));
-            ainicial = ainicial + 120;
-        }
-        for (int i = 0; i < 4; i++) {
-            piezas.add(new Cuarto(500, 50, 150, ainicial, this));
-            ainicial = ainicial + 90;
-        }
-        for (int i = 0; i < 6; i++) {
-            piezas.add(new Secto(100, 200, 150, ainicial, this));
-            ainicial = ainicial + 60;
-        }
-        for (int i = 0; i < 8; i++) {
-            piezas.add(new Octavo(300, 200, 150, ainicial, this));
-            ainicial = ainicial + 45;
-        }
-        for (int i = 0; i < 12; i++) {
-            piezas.add(new Doceavo(200, 100, 200, ainicial, this));
-            ainicial = ainicial + 30;
-        }
+        generarPiezas();
 
         // Genero el marco
         JFrame frame = new JFrame();
@@ -97,10 +73,10 @@ public class Lienzo extends Canvas implements MouseInputListener {
         }
     }
 
-   @Override
-    public void update(Graphics g) {
-        paint(g);
-    }
+//   @Override
+//    public void update(Graphics g) {
+//        paint(g);
+//    }
 
     @Override
     public void paint(Graphics g) {
@@ -154,8 +130,7 @@ public class Lienzo extends Canvas implements MouseInputListener {
         Iterator mesaitr = mesa.iterator();
         while (mesaitr.hasNext()) {
             Pieza tmp = (Pieza) mesaitr.next();
-            tmp.setLastPosicion(((int) tmp.rect().getX()) - me.getX(),
-                    ((int) tmp.rect().getY()) - me.getY());
+            tmp.setLastPosicion((tmp.getX()) - me.getX(),(tmp.getY()) - me.getY());
             if (tmp.rect().contains(me.getX(), me.getY())) {
                 tmp.actulizaPosicion(me);
             } else {
@@ -179,6 +154,45 @@ public class Lienzo extends Canvas implements MouseInputListener {
             } else {
                 tmp.setPressOut(false);
             }
+        }
+    }
+
+    private void generarPiezas() {
+        //Medios
+        int ainicial = 90;
+        for (int i = 0; i < 2; i++) {
+            piezas.add(new Medio(100, 50, 150, ainicial, this));
+            ainicial = ainicial + 180;
+        }
+        //Tercios
+        ainicial = 90;
+        for (int i = 0; i < 3; i++) {
+            piezas.add(new Tercio(300, 50, 150, ainicial, this));
+            ainicial = ainicial + 120;
+        }
+        //Cuartos
+        ainicial = 90;
+        for (int i = 0; i < 4; i++) {
+            piezas.add(new Cuarto(500, 50, 150, ainicial, this));
+            ainicial = ainicial + 90;
+        }
+        //Sectos
+        ainicial = 90;
+        for (int i = 0; i < 6; i++) {
+            piezas.add(new Secto(100, 200, 150, ainicial, this));
+            ainicial = ainicial + 60;
+        }
+        //Octavos
+        ainicial = 90;
+        for (int i = 0; i < 8; i++) {
+            piezas.add(new Octavo(300, 200, 150, ainicial, this));
+            ainicial = ainicial + 45;
+        }
+        //Doceavos
+        ainicial = 90;
+        for (int i = 0; i < 12; i++) {
+            piezas.add(new Doceavo(200, 100, 200, ainicial, this));
+            ainicial = ainicial + 30;
         }
     }
 }
