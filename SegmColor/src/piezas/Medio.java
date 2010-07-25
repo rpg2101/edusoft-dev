@@ -23,7 +23,14 @@ public class Medio extends Pieza {
 
     @Override
     public Rectangle rect() {
-        return new Rectangle(getX(),getY(),getTamelipse(),getTamelipse());
+        Rectangle tmp=null;
+        switch (this.getAnginicial()){
+            case 90: tmp = new Rectangle(getX(),getY(),getTamelipse()/2,
+                    getTamelipse());break; 
+            case 270: tmp = new Rectangle(getX()+getTamelipse()/2,getY(),
+                    getTamelipse()/2,getTamelipse());break;
+        }
+        return tmp;
     }
 
 }

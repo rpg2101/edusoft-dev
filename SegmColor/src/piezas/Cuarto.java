@@ -22,6 +22,18 @@ public class Cuarto extends Pieza {
 
     @Override
     public Rectangle rect() {
-        return new Rectangle(getX(),getY(),getTamelipse(),getTamelipse());
+        Rectangle tmp=null;
+        switch (this.getAnginicial()){
+            case 90: tmp = new Rectangle(getX(),getY(),getTamelipse()/2,
+                    getTamelipse()/2);break;
+            case 180: tmp = new Rectangle(getX(),getY()+getTamelipse()/2,
+                    getTamelipse()/2,getTamelipse()/2);break;
+            case 270: tmp = new Rectangle(getX()+getTamelipse()/2,
+                    getY()+getTamelipse()/2,getTamelipse()/2,getTamelipse()/2);
+                    break;
+            case 360: tmp = new Rectangle(getX()+getTamelipse()/2,getY(),
+                    getTamelipse()/2,getTamelipse()/2);break;
+        }
+        return tmp;
     }
 }
