@@ -23,7 +23,7 @@ class Fracc1 {
     public Fracc1 (){
         final JFrame frame = new JFrame("Proyecto Educativo - Fracciones");
         frame.setLayout(null);
-        frame.setBounds(0, 0, 1000, 550);
+        frame.setBounds(0, 0, 1008, 725);
         frame.setResizable(false);
         Lienzo panel = new Lienzo();
         frame.setLayout(null);
