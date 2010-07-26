@@ -43,7 +43,6 @@ public abstract class Pieza {
     public abstract Rectangle rect();
 
     public void pintarse(Graphics2D g2) {
-        g2.draw(this.rect());
         g2.setColor(this.color);
         g2.fill(new Arc2D.Float(x, y, tamelipse, tamelipse, anginicial,
                 angfinal, Arc2D.PIE));
@@ -53,6 +52,7 @@ public abstract class Pieza {
                 RenderingHints.VALUE_ANTIALIAS_ON));
         g2.draw(new Arc2D.Float(x, y, tamelipse, tamelipse, anginicial,
                 angfinal, Arc2D.PIE));
+        g2.draw(this.rect());
     }
 
     /**
@@ -85,11 +85,10 @@ public abstract class Pieza {
 
     /**
      * @return the angfinal
-     
-    public int getAngfinal() {
-        return angfinal;
-    }*/
 
+    public int getAngfinal() {
+    return angfinal;
+    }*/
     /**
      * @return the ancholinea
      */
@@ -132,11 +131,11 @@ public abstract class Pieza {
         this.y = y;
     }
 
-    public void setPressOut(boolean flag){
+    public void setPressOut(boolean flag) {
         pressOut = flag;
     }
 
-    public boolean getPressOut(){
+    public boolean getPressOut() {
         return pressOut;
     }
 
@@ -161,5 +160,21 @@ public abstract class Pieza {
      * aunque el mouse si lo haga.
      */
     private void checkArea() {
+        Rectangle area = new Rectangle(lienzo.getSize());
+        int new_x = this.x;
+        int new_y = this.y;
+        if ((x + tamelipse) > area.getWidth()) {
+            new_x = (int) area.getWidth() - tamelipse - 1;
+        }
+        if (x < 0) {
+            new_x = -1;
+        }
+        if ((y + tamelipse) > area.getHeight()) {
+            new_y = (int) area.getHeight() - tamelipse - 1;
+        }
+        if (y < 0) {
+            new_y = -1;
+        }
+        this.setPosicion(new_x, new_y);
     }
 }

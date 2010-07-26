@@ -6,8 +6,10 @@ package segmcolor;
 
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.util.Iterator;
 import java.util.Random;
@@ -77,7 +79,6 @@ public class Lienzo extends Canvas implements MouseInputListener {
 //    public void update(Graphics g) {
 //        paint(g);
 //    }
-
     @Override
     public void paint(Graphics g) {
         Graphics2D g2 = (Graphics2D) g.create();
@@ -97,6 +98,7 @@ public class Lienzo extends Canvas implements MouseInputListener {
     }
 
     public void mouseClicked(MouseEvent me) {
+        this.getGraphics().drawRect(me.getX() - 12, me.getY() - 12, 24, 24);
     }
 
     public void mouseEntered(MouseEvent me) {
@@ -111,15 +113,25 @@ public class Lienzo extends Canvas implements MouseInputListener {
          * area de juego.
          */
         Iterator itr = mesa.iterator();
-        while(itr.hasNext()){
-            Pieza tmp = (Pieza)itr.next();
-            if(!tmp.getPressOut()){
+        while (itr.hasNext()) {
+            Pieza tmp = (Pieza) itr.next();
+            if (!tmp.getPressOut()) {
                 tmp.actulizaPosicion(me);
             }
         }
     }
 
     public void mouseMoved(MouseEvent me) {
+        Iterator itr = mesa.iterator();
+        while (itr.hasNext()) {
+            Pieza tmp = (Pieza) itr.next();
+            if (tmp.rect().contains(me.getX(), me.getY())) {
+                this.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }else {
+                this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+            
+        }
     }
 
     public void mousePressed(MouseEvent me) {
@@ -130,12 +142,10 @@ public class Lienzo extends Canvas implements MouseInputListener {
         Iterator mesaitr = mesa.iterator();
         while (mesaitr.hasNext()) {
             Pieza tmp = (Pieza) mesaitr.next();
-            tmp.setLastPosicion((tmp.getX()) - me.getX(),(tmp.getY()) - me.getY());
-            if (tmp.rect().contains(me.getX(), me.getY())) {
+            tmp.setLastPosicion((tmp.getX()) - me.getX(), (tmp.getY()) - me.getY());
+            if (tmp.rect().contains(this.areaMouse(me))) {
                 tmp.actulizaPosicion(me);
             } else {
-                tmp.setLastPosicion(((int) tmp.rect().getX()) + me.getX(),
-                        ((int) tmp.rect().getY()) + me.getY());
                 tmp.setPressOut(true);
             }
         }
@@ -194,5 +204,9 @@ public class Lienzo extends Canvas implements MouseInputListener {
             piezas.add(new Doceavo(200, 100, 200, ainicial, this));
             ainicial = ainicial + 30;
         }
+    }
+
+    private Rectangle areaMouse(MouseEvent me) {
+        return new Rectangle(me.getX() - 12, me.getY() - 12, 24, 24);
     }
 }
