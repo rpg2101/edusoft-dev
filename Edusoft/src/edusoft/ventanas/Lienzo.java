@@ -78,8 +78,8 @@ public class Lienzo extends Canvas {
             }
         }
         if (modificaraltodown) {
-            this.getElem().elementAt(1).set(4, y );
-            this.getElem().elementAt(2).set(4, y );
+            this.getElem().elementAt(1).set(4, y -275);
+            this.getElem().elementAt(2).set(4, y -275);
             if (y >= 150 && y <= 400) {
                 this.outdown = false;
                 this.repaint();
@@ -94,6 +94,33 @@ public class Lienzo extends Canvas {
                     this.outdown = true;
                     this.getElem().elementAt(1).set(4, 125);
                     this.getElem().elementAt(2).set(4, 125);
+                    this.repaint();
+                }
+            }
+        }
+        if (modificaraltoup) {
+            this.getElem().elementAt(0).set(2, y);
+            this.getElem().elementAt(0).set(4, 275 - y);
+            this.getElem().elementAt(3).set(2, y);
+            this.getElem().elementAt(3).set(4, 275 - y);
+            if (y >= 150 && y <= 400) {
+                this.outup = false;
+                this.repaint();
+            } else {
+                if (y < 150) {
+                    this.outup = true;
+                    this.getElem().elementAt(0).set(4, 125);
+                    this.getElem().elementAt(0).set(2, 150);
+                    this.getElem().elementAt(3).set(4, 125);
+                    this.getElem().elementAt(3).set(2, 150);
+                    this.repaint();
+                }
+                if (y > 400) {
+                    this.outup = true;
+                    this.getElem().elementAt(0).set(4, 125);
+                    this.getElem().elementAt(0).set(2, 275);
+                    this.getElem().elementAt(3).set(4, 125);
+                    this.getElem().elementAt(3).set(2, 275);
                     this.repaint();
                 }
             }
@@ -185,6 +212,7 @@ public class Lienzo extends Canvas {
         g.setColor(Color.GREEN);
         g.drawRect(rectangulo.x, rectangulo.y, rectangulo.width, rectangulo.height);
 
+
 //        FontMetrics fm = g.getFontMetrics();
 //        g.drawString("Dividir el rectángulo en partes iguales", 50, 40);
 
@@ -204,21 +232,11 @@ public class Lienzo extends Canvas {
             } else {
                 this.rectangulo.width = x - 100;
             }
-            this.rectangulo.width = x - 100;
-
-            Vector<Integer> aux = new Vector<Integer>();
-            aux.add(1);
-            aux.add(x);
-            aux.add(150);
-            aux.add(5);
-            aux.add(250);
-            elemento.add(aux);
             this.repaint();
             return true;
         }
         if (modificaranchoi) {
             this.modificaranchoi = false;
-            //this.rectangulo.x = x;
             if (outi && x < 100) {
                 this.rectangulo.width = 700;
                 x = 100;
@@ -231,13 +249,38 @@ public class Lienzo extends Canvas {
                 this.rectangulo.width = 800 - x;
                 this.rectangulo.x = x;
             }
-            Vector<Integer> aux = new Vector<Integer>();
-            aux.add(1);
-            aux.add(x);
-            aux.add(150);
-            aux.add(5);
-            aux.add(250);
-            elemento.add(aux);
+            this.repaint();
+            return true;
+        }
+        if (modificaraltodown) {
+            this.modificaraltodown = false;
+            if (outdown && y < 150) {
+                this.rectangulo.height = 125;
+                y = 150;
+            }
+            if (outdown && y > 400) {
+                this.rectangulo.height = 250;
+                y = 400;
+            } else {
+                this.rectangulo.height = y - 150;
+            }
+            this.repaint();
+            return true;
+        }
+        if (modificaraltoup) {
+            this.modificaraltoup = false;
+            if (outup && y < 150) {
+                this.rectangulo.height = 250;
+                y = 150;
+            }
+            if (outup && y > 400) {
+                this.rectangulo.height = 125;
+                this.rectangulo.y = 275;
+                y = 400;
+            } else {
+                this.rectangulo.height = 400 - y;
+                this.rectangulo.y = y;
+            }
             this.repaint();
             return true;
         } else {
@@ -253,12 +296,12 @@ public class Lienzo extends Canvas {
             }
             if (Boolean.valueOf(this.rect(x, y).intersects(rectangulo))) {
                 if ((rectangulo.getMaxY() - 10 < y) && (y < rectangulo.getMaxY() + 10)) {
-                    this.modificaraltoup = true;
+                    this.modificaraltodown = true;
                 }
             }
             if (Boolean.valueOf(this.rect(x, y).intersects(rectangulo))) {
                 if ((rectangulo.getY() - 10 < y) && (y < rectangulo.getY() + 10)) {
-                    this.modificaraltodown = true;
+                    this.modificaraltoup = true;
                 }
             }
             return true;
