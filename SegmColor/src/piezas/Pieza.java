@@ -20,17 +20,18 @@ import segmcolor.Lienzo;
 public abstract class Pieza {
 
     private int x, y, last_x, last_y;
-    private int tamelipse, anginicial, angfinal;
+    final private int tamelipse;
+    private int anginicial, angfinal;
     private Color color;
     private BasicStroke ancholinea;
     private Lienzo lienzo;
     private boolean pressOut;
 
-    public Pieza(int x0, int y0, int elipse, int aini, Lienzo l) {
+    public Pieza(int x0, int y0, int aini, Lienzo l) {
         pressOut = true;
         x = x0;
         y = y0;
-        tamelipse = elipse;
+        tamelipse = 200;
         anginicial = aini;
         lienzo = l;
         ancholinea = new BasicStroke(2.0f, BasicStroke.CAP_BUTT,
