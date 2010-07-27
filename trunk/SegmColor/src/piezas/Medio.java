@@ -14,8 +14,8 @@ import segmcolor.Lienzo;
  */
 public class Medio extends Pieza {
 
-    public Medio(int x0, int y0, int elipse, int ainicial, Lienzo l) {
-        super(x0, y0, elipse, ainicial, l);
+    public Medio(int x0, int y0, int ainicial, Lienzo l) {
+        super(x0, y0, ainicial, l);
         setAngfinal(180);
         setColor(Color.YELLOW);
     }

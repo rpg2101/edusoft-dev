@@ -7,6 +7,7 @@ package segmcolor;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -125,7 +126,7 @@ public class Lienzo extends Canvas implements MouseInputListener {
         Iterator itr = mesa.iterator();
         while (itr.hasNext()) {
             Pieza tmp = (Pieza) itr.next();
-            if (tmp.rect().contains(me.getX(), me.getY())) {
+            if (tmp.rect().contains(this.areaMouse(me))) {
                 this.setCursor(new Cursor(Cursor.HAND_CURSOR));
             }else {
                 this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
@@ -168,46 +169,47 @@ public class Lienzo extends Canvas implements MouseInputListener {
     }
 
     private void generarPiezas() {
+        int x_pos = 200; 
+        int y_pos =200;
         //Medios
-        int tam_seg = 150;
         int ainicial = 90;
         for (int i = 0; i < 2; i++) {
-            piezas.add(new Medio(100, 50, tam_seg, ainicial, this));
+            piezas.add(new Medio(x_pos, y_pos, ainicial, this));
             ainicial = ainicial + 180;
         }
         //Tercios
         ainicial = 90;
         for (int i = 0; i < 3; i++) {
-            piezas.add(new Tercio(300, 50, tam_seg, ainicial, this));
+            piezas.add(new Tercio(x_pos, y_pos, ainicial, this));
             ainicial = ainicial + 120;
         }
         //Cuartos
         ainicial = 90;
         for (int i = 0; i < 4; i++) {
-            piezas.add(new Cuarto(500, 50, tam_seg, ainicial, this));
+            piezas.add(new Cuarto(x_pos, y_pos, ainicial, this));
             ainicial = ainicial + 90;
         }
         //Sectos
         ainicial = 90;
         for (int i = 0; i < 6; i++) {
-            piezas.add(new Secto(100, 200, tam_seg, ainicial, this));
+            piezas.add(new Secto(x_pos, y_pos, ainicial, this));
             ainicial = ainicial + 60;
         }
         //Octavos
         ainicial = 90;
         for (int i = 0; i < 8; i++) {
-            piezas.add(new Octavo(300, 200, tam_seg, ainicial, this));
+            piezas.add(new Octavo(x_pos, y_pos, ainicial, this));
             ainicial = ainicial + 45;
         }
         //Doceavos
         ainicial = 90;
         for (int i = 0; i < 12; i++) {
-            piezas.add(new Doceavo(500, 200, tam_seg, ainicial, this));
+            piezas.add(new Doceavo(x_pos, y_pos, ainicial, this));
             ainicial = ainicial + 30;
         }
     }
 
     private Rectangle areaMouse(MouseEvent me) {
-        return new Rectangle(me.getX() - 10, me.getY() - 10, 20, 20);
+        return new Rectangle(me.getX() - 10, me.getY() - 10 , 20, 20);
     }
 }

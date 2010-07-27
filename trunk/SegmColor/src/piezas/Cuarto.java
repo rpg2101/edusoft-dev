@@ -14,8 +14,8 @@ import segmcolor.Lienzo;
  */
 public class Cuarto extends Pieza {
 
-    public Cuarto(int x0, int y0, int elipse, int ainicial, Lienzo l) {
-        super(x0, y0, elipse, ainicial, l);
+    public Cuarto(int x0, int y0, int ainicial, Lienzo l) {
+        super(x0, y0, ainicial, l);
         setColor(Color.RED);
         setAngfinal(90);
     }
@@ -27,16 +27,16 @@ public class Cuarto extends Pieza {
         int tam_H = getTamelipse() * 1 / 3;
         switch (this.getAnginicial()) {
             case 90:
-                tmp = new Rectangle(getX() + 20, getY() + 20, tam_W, tam_H);
+                tmp = new Rectangle(getX() + 30, getY() + 30, tam_W, tam_H);
                 break;
             case 180:
-                tmp = new Rectangle(getX() + 20, getY() + 80, tam_W, tam_H);
+                tmp = new Rectangle(getX() + 30, getY() + 105, tam_W, tam_H);
                 break;
             case 270:
-                tmp = new Rectangle(getX() + 80, getY() + 80, tam_W, tam_H);
+                tmp = new Rectangle(getX() + 105, getY() + 105, tam_W, tam_H);
                 break;
             case 360:
-                tmp = new Rectangle(getX() + 80, getY() + 20, tam_W, tam_H);
+                tmp = new Rectangle(getX() + 105, getY() + 30, tam_W, tam_H);
                 break;
         }
         return tmp;
