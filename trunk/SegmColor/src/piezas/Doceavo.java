@@ -21,7 +21,7 @@ public class Doceavo extends Pieza {
     }
 
     @Override
-    public Rectangle rect() {
+    public Rectangle segArrastre() {
         Rectangle tmp = null;
         int tam_W = getTamelipse() * 1 / 6;
         int tam_H = getTamelipse() * 1 / 6;

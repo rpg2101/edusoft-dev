@@ -21,7 +21,7 @@ public class Medio extends Pieza {
     }
 
     @Override
-    public Rectangle rect() {
+    public Rectangle segArrastre() {
         Rectangle tmp = null;
         int tam_W = getTamelipse() / 2;
         int tam_H = getTamelipse() / 2;

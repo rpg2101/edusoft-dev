@@ -4,13 +4,15 @@
  */
 package segmcolor;
 
+import java.awt.BasicStroke;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Cursor;
-import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.util.Iterator;
 import java.util.Random;
@@ -27,6 +29,8 @@ public class Lienzo extends Canvas implements MouseInputListener {
 
     private Vector<Pieza> piezas;
     private Vector<Pieza> mesa;
+    private Vector<ZonaPlayer> zonas;
+    private int piezasEnjuego;
 
     public Lienzo() {
         // Defino dimiensiones y color de fondo
@@ -40,9 +44,16 @@ public class Lienzo extends Canvas implements MouseInputListener {
         //Inicializo variables
         piezas = new Vector();
         mesa = new Vector();
-
+        zonas = new Vector();
+        piezasEnjuego = 0;
         //Genero las 35 Piezas
         generarPiezas();
+
+        //Genero las zonas de juegos
+        zonas.add(new ZonaPlayer(20, 350, 227, 300));
+        zonas.add(new ZonaPlayer(262, 350, 227, 300));
+        zonas.add(new ZonaPlayer(503, 350, 227, 300));
+        zonas.add(new ZonaPlayer(745, 350, 227, 300));
 
         // Genero el marco
         JFrame frame = new JFrame();
@@ -66,13 +77,13 @@ public class Lienzo extends Canvas implements MouseInputListener {
      *  Este metodo sustrae 3 piezas aleatorias para ser puestas sobre la
      * mesa de juego
      */
-    public void Repartir() {
+    public void repartir() {
         Random gene = new Random();
         for (int i = mesa.size(); i < 3; i++) {
             Pieza tmp = piezas.remove(gene.nextInt(piezas.size()));
-            tmp.setX(150 + (250 * i));
-            tmp.setY(this.getHeight() / 6);
+            tmp.setPosicion(150 + (250 * i), getHeight() / 6);
             mesa.add(tmp);
+            piezasEnjuego++;
         }
     }
 
@@ -82,14 +93,24 @@ public class Lienzo extends Canvas implements MouseInputListener {
 //    }
     @Override
     public void paint(Graphics g) {
-        Graphics2D g2 = (Graphics2D) g.create();
+        //Preparo el graphics
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setStroke(new BasicStroke(2.0f, BasicStroke.CAP_BUTT,
+                BasicStroke.JOIN_MITER));
+        g2.setRenderingHints(new RenderingHints(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON));
 
+        // Titulo
+        g.setFont(new Font("Serif", Font.BOLD, 30));
+        g.drawString("Armar enteros usando las piezas", getX() + 220, getY() + 35);
+
+        //Dibujo el recuadro mas grande
         g2.drawRect(20, 50, 950, 280);
 
-        g2.drawRect(20, 350, 227, 300);
-        g2.drawRect(262, 350, 227, 300);
-        g2.drawRect(503, 350, 227, 300);
-        g2.drawRect(745, 350, 227, 300);
+        //Dibujo las zonas de juego
+        for (int i = 0; i < 4; i++) {
+            zonas.get(i).pintarse(g2);
+        }
 
         Iterator p = mesa.iterator();
         while (p.hasNext()) {
@@ -99,7 +120,6 @@ public class Lienzo extends Canvas implements MouseInputListener {
     }
 
     public void mouseClicked(MouseEvent me) {
-        this.getGraphics().drawRect(me.getX() - 12, me.getY() - 12, 24, 24);
     }
 
     public void mouseEntered(MouseEvent me) {
@@ -126,12 +146,12 @@ public class Lienzo extends Canvas implements MouseInputListener {
         Iterator itr = mesa.iterator();
         while (itr.hasNext()) {
             Pieza tmp = (Pieza) itr.next();
-            if (tmp.rect().contains(this.areaMouse(me))) {
+            if (tmp.segArrastre().contains(this.areaMouse(me))) {
                 this.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            }else {
+            } else {
                 this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
-            
+
         }
     }
 
@@ -143,8 +163,9 @@ public class Lienzo extends Canvas implements MouseInputListener {
         Iterator mesaitr = mesa.iterator();
         while (mesaitr.hasNext()) {
             Pieza tmp = (Pieza) mesaitr.next();
-            tmp.setLastPosicion((tmp.getX()) - me.getX(), (tmp.getY()) - me.getY());
-            if (tmp.rect().contains(this.areaMouse(me))) {
+            tmp.setLastPosicion((tmp.getX()) - me.getX(),
+                    (tmp.getY()) - me.getY());
+            if (tmp.segArrastre().contains(this.areaMouse(me))) {
                 tmp.actulizaPosicion(me);
             } else {
                 tmp.setPressOut(true);
@@ -160,17 +181,25 @@ public class Lienzo extends Canvas implements MouseInputListener {
         Iterator mesaitr = mesa.iterator();
         while (mesaitr.hasNext()) {
             Pieza tmp = (Pieza) mesaitr.next();
-            if (tmp.rect().contains(me.getX(), me.getY())) {
+            if (tmp.segArrastre().contains(me.getX(), me.getY())) {
                 tmp.actulizaPosicion(me);
             } else {
                 tmp.setPressOut(false);
             }
+            //Alinea piezas a las zonas de juego
+            for (int i = 0; i < 4; i++) {
+                if (zonas.get(i).contains(tmp.segArrastre())) {
+                    alinearSegmZonas(zonas.get(i), tmp);
+                    zonas.get(i).addSegmento(tmp);
+                }
+            }
         }
+        System.out.println(" Release juego " + piezasEnjuego);
     }
 
     private void generarPiezas() {
-        int x_pos = 200; 
-        int y_pos =200;
+        int x_pos = 200;
+        int y_pos = 200;
         //Medios
         int ainicial = 90;
         for (int i = 0; i < 2; i++) {
@@ -209,7 +238,17 @@ public class Lienzo extends Canvas implements MouseInputListener {
         }
     }
 
+    // Area de accion del click del mouse
     private Rectangle areaMouse(MouseEvent me) {
-        return new Rectangle(me.getX() - 10, me.getY() - 10 , 20, 20);
+        return new Rectangle(me.getX() - 10, me.getY() - 10, 20, 20);
+    }
+
+    /** Metodo que alinea los segmentos en las distinas zonas del juego
+     * verifica si el segmento coincide el color
+     * @param zona zona de juego
+     * @param seg  segmento a alinear
+     */
+    private void alinearSegmZonas(Rectangle zona, Pieza seg) {
+        seg.setPosicion((int) zona.getX() + 14, (int) zona.getY() + 20);
     }
 }
