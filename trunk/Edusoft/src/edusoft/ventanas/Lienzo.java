@@ -26,6 +26,8 @@ public class Lienzo extends Canvas {
     private boolean modificaranchoi, modificaraltodown;
     private boolean outi, outup, outdown, outd;
     private Rectangle rectangulo;
+    private Image imag;
+    private Graphics gBuffer;
 
     @Override
     public boolean mouseMove(Event evt, int x, int y) {
@@ -33,11 +35,11 @@ public class Lienzo extends Canvas {
 
             this.getElem().elementAt(0).set(3, x - 450);
             this.getElem().elementAt(1).set(3, x - 450);
-            this.getElem().elementAt(4).set(3,( (800 - x) / 2)+10);
+            this.getElem().elementAt(4).set(3, ((800 - x) / 2) + 10);
             this.getElem().elementAt(4).set(1, x);
             this.getElem().elementAt(6).set(3, (800 - x) / 2);
             this.getElem().elementAt(6).set(1, x + 10);
-            this.getElem().elementAt(5).set(1,(x + (800 - x) / 2)  );
+            this.getElem().elementAt(5).set(1, (x + (800 - x) / 2));
 
             if (x >= 100 && x <= 800) {
                 this.outd = false;
@@ -193,7 +195,7 @@ public class Lienzo extends Canvas {
         rectdoblez2.add(170);
         rectdoblez2.add(0);
         rectdoblez2.add(250);
-        
+
         Vector<Integer> rectdoblez3 = new Vector<Integer>();
         rectdoblez3.add(3);
         rectdoblez3.add(780);
@@ -214,11 +216,14 @@ public class Lienzo extends Canvas {
     }
 
     @Override
-    public void paint(Graphics g) {
-
-        g.setColor(Color.WHITE);
-        g.fillRect(0, 0, getWidth(), getHeight());
-        g.drawImage(texto1, 50, 40, 850, 100, this);
+    public synchronized void update(Graphics g) {
+        if (getGB() == null) {
+            imag = createImage(1000, 700);
+            setGB(imag.getGraphics());
+        }
+        getGB().setColor(Color.WHITE);
+        getGB().fillRect(0, 0, getWidth(), getHeight());
+        getGB().drawImage(texto1, 50, 40, 850, 100, this);
 
         for (int i0 = 0; i0 < getElem().size(); i0++) {
             if ((Integer) getElem().elementAt(i0).get(0) == 0) {
@@ -226,51 +231,100 @@ public class Lienzo extends Canvas {
 //                        (Integer) getElem().elementAt(i0).get(2),
 //                        (Integer) getElem().elementAt(i0).get(3),
 //                        (Integer) getElem().elementAt(i0).get(4), this);
-                
-                g.setColor(Color.LIGHT_GRAY);
-                g.fillRect((Integer) getElem().elementAt(i0).get(1),
+
+                getGB().setColor(Color.LIGHT_GRAY);
+                getGB().fillRect((Integer) getElem().elementAt(i0).get(1),
                         (Integer) getElem().elementAt(i0).get(2),
                         (Integer) getElem().elementAt(i0).get(3),
                         (Integer) getElem().elementAt(i0).get(4));
 
             }
             if ((Integer) getElem().elementAt(i0).get(0) == 1) {
-                g.setColor(Color.LIGHT_GRAY);
-                g.fillRect((Integer) getElem().elementAt(i0).get(1),
+                getGB().setColor(Color.LIGHT_GRAY);
+                getGB().fillRect((Integer) getElem().elementAt(i0).get(1),
                         (Integer) getElem().elementAt(i0).get(2),
                         (Integer) getElem().elementAt(i0).get(3),
                         (Integer) getElem().elementAt(i0).get(4));
             }
             if ((Integer) getElem().elementAt(i0).get(0) == 2) {
-                g.setColor(Color.GRAY);
-                g.fillRect((Integer) getElem().elementAt(i0).get(1),
+                getGB().setColor(Color.GRAY);
+                getGB().fillRect((Integer) getElem().elementAt(i0).get(1),
                         (Integer) getElem().elementAt(i0).get(2),
                         (Integer) getElem().elementAt(i0).get(3),
                         (Integer) getElem().elementAt(i0).get(4));
-          }
+            }
             if ((Integer) getElem().elementAt(i0).get(0) == 3) {
-                g.setColor(Color.LIGHT_GRAY);
-                g.fillArc((Integer) getElem().elementAt(i0).get(1),
+                getGB().setColor(Color.LIGHT_GRAY);
+                getGB().fillArc((Integer) getElem().elementAt(i0).get(1),
                         (Integer) getElem().elementAt(i0).get(2),
                         (Integer) getElem().elementAt(i0).get(3),
-                        (Integer) getElem().elementAt(i0).get(4),-90,180);
-                g.setColor(Color.BLACK);
-                g.drawArc((Integer) getElem().elementAt(i0).get(1),
+                        (Integer) getElem().elementAt(i0).get(4), -90, 180);
+                getGB().setColor(Color.BLACK);
+                getGB().drawArc((Integer) getElem().elementAt(i0).get(1),
                         (Integer) getElem().elementAt(i0).get(2),
                         (Integer) getElem().elementAt(i0).get(3),
-                        (Integer) getElem().elementAt(i0).get(4),-90,180);
+                        (Integer) getElem().elementAt(i0).get(4), -90, 180);
             }
         }
 
 
-        g.setColor(Color.BLUE);
-        g.setColor(Color.GREEN);
-
-
-//        FontMetrics fm = g.getFontMetrics();
-//        g.drawString("Dividir el rectángulo en partes iguales", 50, 40);
-
+        getGB().setColor(Color.BLUE);
+        getGB().setColor(Color.GREEN);
+        g.drawImage(imag, 0, 0, null);
     }
+    
+    public synchronized void paint(Graphics g){
+    getGB().setColor(Color.WHITE);
+        getGB().fillRect(0, 0, getWidth(), getHeight());
+        getGB().drawImage(texto1, 50, 40, 850, 100, this);
+
+        for (int i0 = 0; i0 < getElem().size(); i0++) {
+            if ((Integer) getElem().elementAt(i0).get(0) == 0) {
+//                g.drawImage(basepapel, (Integer) getElem().elementAt(i0).get(1),
+//                        (Integer) getElem().elementAt(i0).get(2),
+//                        (Integer) getElem().elementAt(i0).get(3),
+//                        (Integer) getElem().elementAt(i0).get(4), this);
+
+                getGB().setColor(Color.LIGHT_GRAY);
+                getGB().fillRect((Integer) getElem().elementAt(i0).get(1),
+                        (Integer) getElem().elementAt(i0).get(2),
+                        (Integer) getElem().elementAt(i0).get(3),
+                        (Integer) getElem().elementAt(i0).get(4));
+
+            }
+            if ((Integer) getElem().elementAt(i0).get(0) == 1) {
+                getGB().setColor(Color.LIGHT_GRAY);
+                getGB().fillRect((Integer) getElem().elementAt(i0).get(1),
+                        (Integer) getElem().elementAt(i0).get(2),
+                        (Integer) getElem().elementAt(i0).get(3),
+                        (Integer) getElem().elementAt(i0).get(4));
+            }
+            if ((Integer) getElem().elementAt(i0).get(0) == 2) {
+                getGB().setColor(Color.GRAY);
+                getGB().fillRect((Integer) getElem().elementAt(i0).get(1),
+                        (Integer) getElem().elementAt(i0).get(2),
+                        (Integer) getElem().elementAt(i0).get(3),
+                        (Integer) getElem().elementAt(i0).get(4));
+            }
+            if ((Integer) getElem().elementAt(i0).get(0) == 3) {
+                getGB().setColor(Color.LIGHT_GRAY);
+                getGB().fillArc((Integer) getElem().elementAt(i0).get(1),
+                        (Integer) getElem().elementAt(i0).get(2),
+                        (Integer) getElem().elementAt(i0).get(3),
+                        (Integer) getElem().elementAt(i0).get(4), -90, 180);
+                getGB().setColor(Color.BLACK);
+                getGB().drawArc((Integer) getElem().elementAt(i0).get(1),
+                        (Integer) getElem().elementAt(i0).get(2),
+                        (Integer) getElem().elementAt(i0).get(3),
+                        (Integer) getElem().elementAt(i0).get(4), -90, 180);
+            }
+        }
+
+
+        getGB().setColor(Color.BLUE);
+        getGB().setColor(Color.GREEN);
+        g.drawImage(imag, 0, 0, null);
+}
 
     @Override
     public boolean mouseDown(Event evt, int x, int y) {
@@ -360,6 +414,14 @@ public class Lienzo extends Canvas {
             }
             return true;
         }
+    }
+
+    private Graphics getGB() {
+        return gBuffer;
+    }
+
+    private void setGB(Graphics gb) {
+        gBuffer = gb;
     }
 
     public Rectangle rect(int x, int y) {
