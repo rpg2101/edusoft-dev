@@ -15,7 +15,6 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.util.Iterator;
-import java.util.Random;
 import java.util.Vector;
 import javax.swing.JFrame;
 import javax.swing.event.MouseInputListener;
@@ -117,10 +116,10 @@ public class Lienzo extends Canvas implements MouseInputListener {
             Pieza tmp = (Pieza) itr.next();
             if (tmp.segArrastre().contains(this.areaMouse(me))) {
                 this.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                break;
             } else {
                 this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
-
         }
     }
 
@@ -132,10 +131,8 @@ public class Lienzo extends Canvas implements MouseInputListener {
         Iterator mesaitr = mesa.iterator();
         while (mesaitr.hasNext()) {
             Pieza tmp = (Pieza) mesaitr.next();
-            //Selecciono solo las piezas de 1 y 4 cuadrante
-            tmp.setLastPosicion((tmp.getX()) - me.getX(),
-                    (tmp.getY()) - me.getY());
-            if (tmp.segArrastre().contains(this.areaMouse(me))) {
+            tmp.setLastPosicion((tmp.getX()) - me.getX(), (tmp.getY()) - me.getY());
+            if (tmp.segArrastre().contains(me.getX(),me.getY())) {
                 tmp.actulizaPosicion(me);
             } else {
                 tmp.setPressOut(true);
@@ -153,11 +150,15 @@ public class Lienzo extends Canvas implements MouseInputListener {
             Pieza tmp = (Pieza) mesaitr.next();
             if (tmp.segArrastre().contains(me.getX(), me.getY())) {
                 tmp.actulizaPosicion(me);
+                //Alinea piezas al medio patron de juego
+                this.alinearPatron(tmp);
+
             } else {
                 tmp.setPressOut(false);
             }
-            //Alinea piezas al medio patron de juego
         }
+        // Chequeo si completo el entero
+        chkEnteros();
     }
 
     private void generarPiezas() {
@@ -201,5 +202,49 @@ public class Lienzo extends Canvas implements MouseInputListener {
     // Area de accion del click del mouse
     private Rectangle areaMouse(MouseEvent me) {
         return new Rectangle(me.getX() - 10, me.getY() - 10, 20, 20);
+    }
+
+    /** Devuelve un rectangulo que representa el area de ajuste de una
+     * pieza patron
+     */
+    private void alinearPatron(Pieza p) {
+        Rectangle patron = new Rectangle(mesa.firstElement().getX() - 50,
+                mesa.firstElement().getY() - 50, 300, 300);
+        if (patron.contains(p.segArrastre())) {
+            p.setPosicion(mesa.firstElement().getX(), mesa.firstElement().getY());
+        } else {
+            p.resetPosicion();
+        }
+    }
+
+    /**
+     *
+     */
+    private void chkEnteros() {
+        boolean congruentes = false;
+        Iterator it = mesa.iterator();
+        Pieza patron = mesa.firstElement();
+        int sumaAngulos = patron.getAngfinal();
+        //Remuevo la pieza patron de la lista de chequeo
+        it.next();
+        while (it.hasNext()) {
+            Pieza p = (Pieza) it.next();
+            //Seleccione solo las piezas alineadas a la pieza patron
+            if (p.getX() == patron.getX() && p.getY() == patron.getY()) {
+                // Chequeo que la pieza
+                if (patron.ckInnerAng(p.getAnginicial())) {
+                    sumaAngulos = sumaAngulos + p.getAngfinal();
+                    patron = p;
+                    congruentes = true;
+                } else {
+                    congruentes = false;
+                }
+            }
+        }
+        //Verifico la suma de los angulos
+        if (sumaAngulos == 360 && congruentes) {
+            System.out.println("Formaste un entero");
+        }
+
     }
 }

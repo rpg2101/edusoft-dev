@@ -4,11 +4,9 @@
  */
 package piezas;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Arc2D;
 import segmsincolor.Lienzo;
@@ -44,10 +42,6 @@ public abstract class Pieza {
         g2.fill(new Arc2D.Float(x, y, tamelipse, tamelipse, anginicial,
                 angfinal, Arc2D.PIE));
         g2.setColor(Color.black);
-        g2.setStroke(new BasicStroke(2.0f, BasicStroke.CAP_BUTT,
-                BasicStroke.JOIN_MITER));
-        g2.setRenderingHints(new RenderingHints(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON));
         g2.draw(new Arc2D.Float(x, y, tamelipse, tamelipse, anginicial,
                 angfinal, Arc2D.PIE));
     }
@@ -100,8 +94,16 @@ public abstract class Pieza {
     /**
      * @return the angfinal
      */
-    public void setAngfinal(int afinal) {
+    protected void setAngfinal(int afinal) {
         angfinal = afinal;
+    }
+
+    /**
+     * Devuelve el angulo interior del segmento
+     */
+    public boolean ckInnerAng(int ang){
+        Integer integer = Integer.valueOf(ang);
+        return integer.equals(anginicial+angfinal);
     }
 
     /**
