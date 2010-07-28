@@ -23,7 +23,6 @@ public abstract class Pieza {
     final private int tamelipse;
     private int anginicial, angfinal;
     private Color color;
-    private BasicStroke ancholinea;
     private Lienzo lienzo;
     private boolean pressOut;
 
@@ -34,27 +33,29 @@ public abstract class Pieza {
         tamelipse = 200;
         anginicial = aini;
         lienzo = l;
-        ancholinea = new BasicStroke(2.0f, BasicStroke.CAP_BUTT,
-                BasicStroke.JOIN_MITER);
     }
 
     /*
      * Metodo implementado por cada pieza para pintarse
      */
-    public abstract Rectangle rect();
-
     public void pintarse(Graphics2D g2) {
         g2.setColor(this.color);
         g2.fill(new Arc2D.Float(x, y, tamelipse, tamelipse, anginicial,
                 angfinal, Arc2D.PIE));
         g2.setColor(Color.black);
-        g2.setStroke(this.getAncholinea());
+        g2.setStroke(new BasicStroke(2.0f, BasicStroke.CAP_BUTT,
+                BasicStroke.JOIN_MITER));
         g2.setRenderingHints(new RenderingHints(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON));
         g2.draw(new Arc2D.Float(x, y, tamelipse, tamelipse, anginicial,
                 angfinal, Arc2D.PIE));
-        g2.draw(this.rect());
     }
+
+    /**
+     * Este metodo retornará las zonas de arrastre de cada segmento
+     * @return
+     */
+    public abstract Rectangle segArrastre();
 
     /**
      * @return the x
@@ -86,15 +87,16 @@ public abstract class Pieza {
 
     /**
      * @return the angfinal
-
-    public int getAngfinal() {
-    return angfinal;
-    }*/
-    /**
-     * @return the ancholinea
      */
-    public BasicStroke getAncholinea() {
-        return ancholinea;
+    public int getAngfinal() {
+        return angfinal;
+    }
+
+    /**
+     * @return the angfinal
+     */
+    public void setAngfinal(int afinal) {
+        angfinal = afinal;
     }
 
     /**
@@ -112,26 +114,9 @@ public abstract class Pieza {
     }
 
     /**
-     * @param angfinal the angfinal to set
+     * Seteo la bandera de PressOut
+     * @param flag
      */
-    public void setAngfinal(int angfinal) {
-        this.angfinal = angfinal;
-    }
-
-    /**
-     * @param x the x to set
-     */
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    /**
-     * @param y the y to set
-     */
-    public void setY(int y) {
-        this.y = y;
-    }
-
     public void setPressOut(boolean flag) {
         pressOut = flag;
     }
@@ -150,11 +135,16 @@ public abstract class Pieza {
         y = y0;
     }
 
-    public void actulizaPosicion(MouseEvent me) {
-        this.setPosicion(last_x + me.getX(), last_y + me.getY());
+    public void actulizaPosicion(MouseEvent m) {
+        this.setPosicion(last_x + m.getX(), last_y + m.getY());
+        this.actulizaPosicion();
+    }
+
+    public void actulizaPosicion() {
         checkArea();
         lienzo.repaint();
     }
+
 
     /**
      * Este metodo verifica que la figura no abandone el area de la ventana

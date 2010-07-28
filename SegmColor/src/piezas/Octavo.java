@@ -21,7 +21,7 @@ public class Octavo extends Pieza {
     }
 
     @Override
-    public Rectangle rect() {
+    public Rectangle segArrastre() {
         Rectangle tmp = null;
         int tam_W = getTamelipse() * 1 / 5;
         int tam_H = getTamelipse() * 1 / 5;
