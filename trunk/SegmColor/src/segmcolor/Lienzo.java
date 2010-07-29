@@ -11,6 +11,7 @@ import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
@@ -31,6 +32,7 @@ public class Lienzo extends Canvas implements MouseInputListener {
     private Vector<Pieza> mesa;
     private Vector<ZonaPlayer> zonas;
     private int piezasEnjuego;
+    private Image imagen;
 
     public Lienzo() {
         // Defino dimiensiones y color de fondo
@@ -87,14 +89,17 @@ public class Lienzo extends Canvas implements MouseInputListener {
         }
     }
 
-//   @Override
-//    public void update(Graphics g) {
-//        paint(g);
-//    }
+   @Override
+    public void update(Graphics g) {
+        paint(g);
+    }
+
     @Override
     public void paint(Graphics g) {
         //Preparo el graphics
-        Graphics2D g2 = (Graphics2D) g;
+        Image image = createImage(WIDTH,HEIGHT);
+        Graphics2D g2 = (Graphics2D) image.getGraphics();
+        //Dibujo los elementos
         g2.setStroke(new BasicStroke(2.0f, BasicStroke.CAP_BUTT,
                 BasicStroke.JOIN_MITER));
         g2.setRenderingHints(new RenderingHints(RenderingHints.KEY_ANTIALIASING,
@@ -117,6 +122,7 @@ public class Lienzo extends Canvas implements MouseInputListener {
             Pieza segmento = (Pieza) p.next();
             segmento.pintarse(g2);
         }
+        g.drawImage(image, 0, 0, null);
     }
 
     public void mouseClicked(MouseEvent me) {
@@ -148,6 +154,7 @@ public class Lienzo extends Canvas implements MouseInputListener {
             Pieza tmp = (Pieza) itr.next();
             if (tmp.segArrastre().contains(this.areaMouse(me))) {
                 this.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                break;
             } else {
                 this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
             }
