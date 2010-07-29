@@ -5,10 +5,12 @@
 package piezas;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Arc2D;
+import java.awt.image.BufferedImage;
 import segmsincolor.Lienzo;
 
 /**
