@@ -11,9 +11,11 @@ import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.util.Iterator;
 import java.util.Vector;
 import javax.swing.JFrame;
@@ -64,17 +66,25 @@ public class Lienzo extends Canvas implements MouseInputListener {
     }
 
     @Override
+    public void update(Graphics g){
+        paint(g);
+    }
+
+    @Override
     public void paint(Graphics g) {
         //Preparo el graphics
-        Graphics2D g2 = (Graphics2D) g;
+        BufferedImage imagen = (BufferedImage)createImage(WIDTH,HEIGHT);
+        Graphics2D g2 = imagen.createGraphics();
+        
+        //Dibujo los elementos
         g2.setStroke(new BasicStroke(2.0f, BasicStroke.CAP_BUTT,
                 BasicStroke.JOIN_MITER));
         g2.setRenderingHints(new RenderingHints(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON));
 
         // Titulo
-        g.setFont(new Font("Serif", Font.BOLD, 30));
-        g.drawString("Completar el medio usando las siguiente piezas",
+        g2.setFont(new Font("Serif", Font.BOLD, 30));
+        g2.drawString("Completar el entero usando piezas del mismo color",
                 getX() + 130, getY() + 35);
 
         //Dibujo el recuadro mas grande
@@ -85,6 +95,8 @@ public class Lienzo extends Canvas implements MouseInputListener {
             Pieza segmento = (Pieza) p.next();
             segmento.pintarse(g2);
         }
+        g2.drawImage(imagen, null, 0, 0);
+        
     }
 
     public void mouseClicked(MouseEvent me) {
