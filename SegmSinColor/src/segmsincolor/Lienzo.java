@@ -14,13 +14,11 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.event.MouseInputListener;
 import piezas.*;
 
@@ -30,7 +28,7 @@ import piezas.*;
  */
 public class Lienzo extends Canvas implements MouseInputListener {
 
-    private Vector<Pieza> piezas;
+    private Vector<Trofeo> trofeos;
     private Vector<Pieza> mesa;
 
     public Lienzo() {
@@ -43,8 +41,9 @@ public class Lienzo extends Canvas implements MouseInputListener {
         this.addMouseMotionListener(this);
 
         //Inicializo variables
-        piezas = new Vector();
+        //piezas = new Vector();
         mesa = new Vector();
+        trofeos = new Vector();
 
         //Genero las Piezas
         generarPiezas();
@@ -58,10 +57,6 @@ public class Lienzo extends Canvas implements MouseInputListener {
         frame.add(this);
         frame.setVisible(true);
         this.mouseClicked(null);
-    }
-
-    public Vector<Pieza> getPiezas() {
-        return piezas;
     }
 
     public Vector<Pieza> getMesa() {
@@ -84,14 +79,23 @@ public class Lienzo extends Canvas implements MouseInputListener {
         g2.setRenderingHints(new RenderingHints(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON));
 
-        // Titulo
+        // Titulo y Cartel de trofeos
         g2.setFont(new Font("Serif", Font.BOLD, 30));
         g2.drawString("Completar el entero usando piezas del mismo color",
-                getX() + 130, getY() + 35);
-
+                100, 35);
+        g2.setFont(new Font("Serif", Font.BOLD, 25));
+        g2.drawString("Combinaciones obtenidas:", 50, this.getHeight() - 210);
         //Dibujo el recuadro mas grande
         g2.drawRect(getWidth() - 230, 60, 220, 620);
 
+        // Rutina que dibuja los trofeos
+        Iterator tr = trofeos.iterator();
+        while (tr.hasNext()) {
+            Trofeo tmp = (Trofeo) tr.next();
+            tmp.pintarse(g);
+        }
+
+        // Rutina que dibuja las piezas
         Iterator p = mesa.iterator();
         while (p.hasNext()) {
             Pieza segmento = (Pieza) p.next();
@@ -101,19 +105,17 @@ public class Lienzo extends Canvas implements MouseInputListener {
 
     }
 
-    public void trofeoMedio() {
-        System.out.println("Hoa medios");
+    //Metodos que adiciona los trofeos a la imagen
+    private void trofeoMedio() {
+        trofeos.add(new Trofeo(30, this.getHeight() - 190, 150, "Medio"));
     }
 
-    public void trofeoCuarto() {
-        System.out.println("Hoa cuartos");
+    private void trofeoCuarto() {
+        trofeos.add(new Trofeo(260, this.getHeight() - 190, 150, "Cuarto"));
     }
 
-    public void trofeoOctavo() {
-        System.out.println("Hoa octavos");
-    }
-
-    public void trofeonull() {
+    private void trofeoOctavo() {
+        trofeos.add(new Trofeo(490, this.getHeight() - 190, 150, "Octavo"));
     }
 
     public void mouseClicked(MouseEvent me) {
@@ -186,7 +188,30 @@ public class Lienzo extends Canvas implements MouseInputListener {
                 tmp.setPressOut(false);
             }
         }
-        
+        //Verifico que forme un entero y anuncio el resultado
+        try {
+            if (chkEnteros().equals("Medio")) {
+                trofeoMedio();
+            }
+            if (chkEnteros().equals("Cuarto")) {
+                trofeoCuarto();
+            }
+            if (chkEnteros().equals("Octavo")) {
+                trofeoOctavo();
+            }
+            //Ventana de anuncio
+            JFrame f = new JFrame();
+            f.setBounds(getWidth() / 2 - 100, getHeight() / 2 - 100, 200, 200);
+            f.setResizable(false);
+            JPanel p = new JPanel();
+            JButton b = new JButton("Siguente");
+            b.setAlignmentX(JButton.CENTER_ALIGNMENT);
+            b.setAlignmentY(JButton.BOTTOM);
+            p.add(b);
+            f.add(p);
+            f.setVisible(true);
+        } catch (Exception e) {
+        }
     }
 
     private void generarPiezas() {
