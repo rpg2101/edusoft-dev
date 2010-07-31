@@ -6,6 +6,7 @@ package edusoft.ventanas;
 
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Event;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -35,7 +36,13 @@ public class Lienzo extends Canvas {
 
     @Override
     public boolean mouseMove(Event evt, int x, int y) {
+        if (this.checkpuntero(x, y) == true) {
+            this.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        } else {
+            this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+        }
         if (modificaranchod) {
+            this.setCursor(new Cursor(Cursor.MOVE_CURSOR));
             this.getElem().elementAt(0).set(3, x);
             this.getElem().elementAt(1).set(3, (ancho - x) / 2);
             this.getElem().elementAt(1).set(1, x);
@@ -52,7 +59,7 @@ public class Lienzo extends Canvas {
                     this.getElem().elementAt(0).set(3, 5);
                     this.getElem().elementAt(1).set(3, (ancho - margenx + 30) / 2);
                     this.getElem().elementAt(1).set(1, margenx);
-                    this.getElem().elementAt(3).set(3, ((ancho - margenx + 30) / 2)-10);
+                    this.getElem().elementAt(3).set(3, ((ancho - margenx + 30) / 2) - 10);
                     this.getElem().elementAt(3).set(1, margenx);
                     this.getElem().elementAt(2).set(1, (margenx + (ancho - margenx) / 2));
                     this.repaint();
@@ -64,7 +71,7 @@ public class Lienzo extends Canvas {
                     this.getElem().elementAt(1).set(1, 0);
                     this.getElem().elementAt(3).set(3, 0);
                     this.getElem().elementAt(3).set(1, 0);
-                    this.getElem().elementAt(2).set(1, margenx+ancho);
+                    this.getElem().elementAt(2).set(1, margenx + ancho);
                     this.repaint();
                 }
             }
@@ -262,6 +269,7 @@ public class Lienzo extends Canvas {
     @Override
     public boolean mouseDown(Event evt, int x, int y) {
         if (modificaranchod) {
+            this.setCursor(new Cursor(Cursor.HAND_CURSOR));
             this.modificaranchod = false;
             if (outd && x < margenx) {
                 this.rectangulo.width = 5;
@@ -360,6 +368,32 @@ public class Lienzo extends Canvas {
     public Rectangle rect(int x, int y) {
         Rectangle r = new Rectangle(x - 10, y - 10, 20, 20);
         return r;
+    }
+
+    private boolean checkpuntero(int x, int y) {
+        if (Boolean.valueOf(this.rect(x, y).intersects(rectangulo))) {
+            if ((rectangulo.getMaxX() - 10 < x) && (x < rectangulo.getMaxX() + 10)) {
+                return true;
+            }
+        }
+//        if (Boolean.valueOf(this.rect(x, y).intersects(rectangulo))) {
+//            if ((rectangulo.getX() - 10 < x) && (x < rectangulo.getX() + 10)) {
+//                return true;
+//
+//            }
+//        }
+//        if (Boolean.valueOf(this.rect(x, y).intersects(rectangulo))) {
+//            if ((rectangulo.getMaxY() - 10 < y) && (y < rectangulo.getMaxY() + 10)) {
+//                return true;
+//
+//            }
+//        }
+//        if (Boolean.valueOf(this.rect(x, y).intersects(rectangulo))) {
+//            if ((rectangulo.getY() - 10 < y) && (y < rectangulo.getY() + 10)) {
+//                return true;
+//            }
+//        }
+        return false;
     }
 }
 
