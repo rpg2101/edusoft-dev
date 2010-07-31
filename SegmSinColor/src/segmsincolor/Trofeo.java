@@ -2,30 +2,31 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package segmsincolor;
 
-
 import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.image.ImageObserver;
+import javax.swing.ImageIcon;
 
 /**
  *
  * @author curio
  */
 class Trofeo {
-    public String name;
-    public int x,y,tam;
 
-    public Trofeo(int x0, int y0, int t, String n){
-        x=x0;
+    private String name;
+    private int x, y, tam;
+    private Image img;
+
+    public Trofeo(int x0, int y0, int t, String i) {
+        x = x0;
         y = y0;
         tam = t;
-        name = n;
+        img = new ImageIcon(getClass().getResource(i)).getImage();
     }
 
-    public void pintarse (Graphics g){
-        g.drawRect(x, y, tam, tam);
-        g.drawString(name, x+50, y+50);
+    public void pintarse(Graphics g, Lienzo l) {
+        g.drawImage(img, x, y, tam, tam,l);
     }
-
 }

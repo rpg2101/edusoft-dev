@@ -30,10 +30,11 @@ public class Lienzo extends Canvas implements MouseInputListener {
 
     private Vector<Trofeo> trofeos;
     private Vector<Pieza> mesa;
+    private boolean sobrePieza;
 
     public Lienzo() {
         // Defino dimiensiones y color de fondo
-        this.setBounds(0, 0, 1000, 700);
+        this.setBounds(0, 0, 800, 600);
         this.setBackground(Color.WHITE);
 
         // Agrego los MouseListener
@@ -44,6 +45,7 @@ public class Lienzo extends Canvas implements MouseInputListener {
         //piezas = new Vector();
         mesa = new Vector();
         trofeos = new Vector();
+        sobrePieza = false;
 
         //Genero las Piezas
         generarPiezas();
@@ -82,17 +84,18 @@ public class Lienzo extends Canvas implements MouseInputListener {
         // Titulo y Cartel de trofeos
         g2.setFont(new Font("Serif", Font.BOLD, 30));
         g2.drawString("Completar el entero usando piezas del mismo color",
-                100, 35);
+                80, 35);
         g2.setFont(new Font("Serif", Font.BOLD, 25));
         g2.drawString("Combinaciones obtenidas:", 50, this.getHeight() - 210);
+
         //Dibujo el recuadro mas grande
-        g2.drawRect(getWidth() - 230, 60, 220, 620);
+        g2.drawRect(getWidth() - 240, 60, 220, 620);
 
         // Rutina que dibuja los trofeos
         Iterator tr = trofeos.iterator();
         while (tr.hasNext()) {
             Trofeo tmp = (Trofeo) tr.next();
-            tmp.pintarse(g);
+            tmp.pintarse(g, this);
         }
 
         // Rutina que dibuja las piezas
@@ -107,15 +110,15 @@ public class Lienzo extends Canvas implements MouseInputListener {
 
     //Metodos que adiciona los trofeos a la imagen
     private void trofeoMedio() {
-        trofeos.add(new Trofeo(30, this.getHeight() - 190, 150, "Medio"));
+        trofeos.add(new Trofeo(30, this.getHeight() - 170, 150, "trofeo_medio.png"));
     }
 
     private void trofeoCuarto() {
-        trofeos.add(new Trofeo(260, this.getHeight() - 190, 150, "Cuarto"));
+        trofeos.add(new Trofeo(260, this.getHeight() - 170, 150, "trofeo_cuarto.png"));
     }
 
     private void trofeoOctavo() {
-        trofeos.add(new Trofeo(490, this.getHeight() - 190, 150, "Octavo"));
+        trofeos.add(new Trofeo(490, this.getHeight() - 170, 150, "trofeo_octavo.png"));
     }
 
     public void mouseClicked(MouseEvent me) {
@@ -159,14 +162,17 @@ public class Lienzo extends Canvas implements MouseInputListener {
          * Aqui inspeccionamos todas las piezas en la mesa buscando la que
          * tenga el area que coincida con el x e y del mouse.
          */
+        System.out.println(sobrePieza);
         Iterator mesaitr = mesa.iterator();
         while (mesaitr.hasNext()) {
             Pieza tmp = (Pieza) mesaitr.next();
             tmp.setLastPosicion((tmp.getX()) - me.getX(), (tmp.getY()) - me.getY());
             if (tmp.segArrastre().contains(me.getX(), me.getY())) {
                 tmp.actulizaPosicion(me);
+                sobrePieza = true;
             } else {
                 tmp.setPressOut(true);
+                sobrePieza = false;
             }
         }
     }
@@ -179,13 +185,14 @@ public class Lienzo extends Canvas implements MouseInputListener {
         Iterator mesaitr = mesa.iterator();
         while (mesaitr.hasNext()) {
             Pieza tmp = (Pieza) mesaitr.next();
-            if (tmp.segArrastre().contains(me.getX(), me.getY())) {
+            if (tmp.segArrastre().contains(me.getX(), me.getY()) && sobrePieza) {
                 tmp.actulizaPosicion(me);
                 //Alinea piezas al medio patron de juego
                 this.alinearPatron(tmp);
-
+                sobrePieza = false;
             } else {
                 tmp.setPressOut(false);
+                sobrePieza = true;
             }
         }
         //Verifico que forme un entero y anuncio el resultado
@@ -200,13 +207,11 @@ public class Lienzo extends Canvas implements MouseInputListener {
                 trofeoOctavo();
             }
             //Ventana de anuncio
-            JFrame f = new JFrame();
+            JFrame f = new JFrame("Fracciones");
             f.setBounds(getWidth() / 2 - 100, getHeight() / 2 - 100, 200, 200);
             f.setResizable(false);
             JPanel p = new JPanel();
             JButton b = new JButton("Siguente");
-            b.setAlignmentX(JButton.CENTER_ALIGNMENT);
-            b.setAlignmentY(JButton.BOTTOM);
             p.add(b);
             f.add(p);
             f.setVisible(true);
@@ -215,10 +220,10 @@ public class Lienzo extends Canvas implements MouseInputListener {
     }
 
     private void generarPiezas() {
-        int x_pos = getWidth() - 220;
+        int x_pos = getWidth() - 30;
         int y_pos = 65;
         //Medio 
-        mesa.add(new Medio(130, 150, 90, this));
+        mesa.add(new Medio(100, 150, 90, this));
 
         int ainicial = 90;
         //Medios
