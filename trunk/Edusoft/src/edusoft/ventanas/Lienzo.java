@@ -25,7 +25,7 @@ public class Lienzo extends Canvas {
     private Image pliegue, solapa, basepapel0, basepapel1, basepapel2, basepapel3, puntapapel;
     private boolean modificaranchod, modificaraltoup;
     private boolean modificaranchoi, modificaraltodown;
-    private boolean outi, outup, outdown, outd;
+    private boolean outi, outup, outdown, outd, lograste;
     private Rectangle rectangulo;
     private Image imag;
     private Graphics gBuffer;
@@ -214,6 +214,7 @@ public class Lienzo extends Canvas {
         this.outi = false;
         this.outup = false;
         this.outdown = false;
+        this.lograste = false;
     }
 
     @Override
@@ -260,8 +261,13 @@ public class Lienzo extends Canvas {
                         (Integer) getElem().elementAt(i0).get(4), this);
             }
         }
-        getGB().setColor(Color.RED);
+        getGB().setColor(Color.GRAY);
         getGB().drawRect(rectangulo.x, rectangulo.y, rectangulo.width, rectangulo.height);
+        if (lograste == true) {
+            getGB().setFont(new Font("Serif", Font.BOLD, 30));
+            getGB().drawString(" Como son las partes ? ", 50, 420);
+        }
+
         g.drawImage(imag, 0, 0, null);
 
     }
@@ -274,6 +280,8 @@ public class Lienzo extends Canvas {
             if (outd && x < margenx) {
                 this.rectangulo.width = 5;
                 x = margenx;
+                lograste = true;
+                repaint();
             }
             if (outd && x > margenx + ancho) {
                 this.rectangulo.width = ancho;
