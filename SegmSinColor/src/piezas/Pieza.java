@@ -5,12 +5,10 @@
 package piezas;
 
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Arc2D;
-import java.awt.image.BufferedImage;
 import segmsincolor.Lienzo;
 
 /**
@@ -24,14 +22,14 @@ public abstract class Pieza {
     private int anginicial, angfinal;
     private Color color;
     private Lienzo lienzo;
-    private boolean pressOut,isPatron;
+    private boolean pressOut, isPatron;
 
     public Pieza(int x0, int y0, int aini, Lienzo l) {
         pressOut = true;
         isPatron = false;
         x = x_ini = x0;
         y = y_ini = y0;
-        tamelipse = 200;
+        tamelipse = 150;
         anginicial = aini;
         lienzo = l;
     }
@@ -46,10 +44,7 @@ public abstract class Pieza {
         g2.setColor(Color.black);
         g2.draw(new Arc2D.Float(x, y, tamelipse, tamelipse, anginicial,
                 angfinal, Arc2D.PIE));
-    }
-
-    public void resetPosicion() {
-        setPosicion(x_ini, y_ini);
+        g2.draw(segArrastre());
     }
 
     /**
@@ -103,9 +98,9 @@ public abstract class Pieza {
     /**
      * Devuelve el angulo interior del segmento
      */
-    public boolean ckInnerAng(int ang){
+    public boolean ckInnerAng(int ang) {
         Integer integer = Integer.valueOf(ang);
-        return integer.equals(anginicial+angfinal);
+        return integer.equals(anginicial + angfinal);
     }
 
     /**
@@ -154,6 +149,10 @@ public abstract class Pieza {
     public void setPosicion(int x0, int y0) {
         x = x0;
         y = y0;
+    }
+
+    public void resetPosicion() {
+        setPosicion(x_ini, y_ini);
     }
 
     public void actulizaPosicion(MouseEvent m) {
