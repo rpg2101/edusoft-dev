@@ -11,13 +11,15 @@ import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.event.MouseInputListener;
 import piezas.*;
@@ -55,6 +57,7 @@ public class Lienzo extends Canvas implements MouseInputListener {
         frame.setTitle("Fracciones");
         frame.add(this);
         frame.setVisible(true);
+        this.mouseClicked(null);
     }
 
     public Vector<Pieza> getPiezas() {
@@ -65,17 +68,16 @@ public class Lienzo extends Canvas implements MouseInputListener {
         return mesa;
     }
 
-    @Override
-    public void update(Graphics g){
-        paint(g);
-    }
-
+//    @Override
+//    public void update(Graphics g){
+//        paint(g);
+//    }
     @Override
     public void paint(Graphics g) {
         //Preparo el graphics
-        BufferedImage imagen = (BufferedImage)createImage(WIDTH,HEIGHT);
-        Graphics2D g2 = imagen.createGraphics();
-        
+        //BufferedImage imagen = (BufferedImage)createImage(WIDTH,HEIGHT);
+        Graphics2D g2 = (Graphics2D) g;
+
         //Dibujo los elementos
         g2.setStroke(new BasicStroke(2.0f, BasicStroke.CAP_BUTT,
                 BasicStroke.JOIN_MITER));
@@ -95,8 +97,23 @@ public class Lienzo extends Canvas implements MouseInputListener {
             Pieza segmento = (Pieza) p.next();
             segmento.pintarse(g2);
         }
-        g2.drawImage(imagen, null, 0, 0);
-        
+        //g2.drawImage(imagen, this, 0, 0);
+
+    }
+
+    public void trofeoMedio() {
+        System.out.println("Hoa medios");
+    }
+
+    public void trofeoCuarto() {
+        System.out.println("Hoa cuartos");
+    }
+
+    public void trofeoOctavo() {
+        System.out.println("Hoa octavos");
+    }
+
+    public void trofeonull() {
     }
 
     public void mouseClicked(MouseEvent me) {
@@ -144,7 +161,7 @@ public class Lienzo extends Canvas implements MouseInputListener {
         while (mesaitr.hasNext()) {
             Pieza tmp = (Pieza) mesaitr.next();
             tmp.setLastPosicion((tmp.getX()) - me.getX(), (tmp.getY()) - me.getY());
-            if (tmp.segArrastre().contains(me.getX(),me.getY())) {
+            if (tmp.segArrastre().contains(me.getX(), me.getY())) {
                 tmp.actulizaPosicion(me);
             } else {
                 tmp.setPressOut(true);
@@ -169,8 +186,7 @@ public class Lienzo extends Canvas implements MouseInputListener {
                 tmp.setPressOut(false);
             }
         }
-        // Chequeo si completo el entero
-        chkEnteros();
+        
     }
 
     private void generarPiezas() {
@@ -216,9 +232,6 @@ public class Lienzo extends Canvas implements MouseInputListener {
         return new Rectangle(me.getX() - 10, me.getY() - 10, 20, 20);
     }
 
-    /** Devuelve un rectangulo que representa el area de ajuste de una
-     * pieza patron
-     */
     private void alinearPatron(Pieza p) {
         Rectangle patron = new Rectangle(mesa.firstElement().getX() - 50,
                 mesa.firstElement().getY() - 50, 300, 300);
@@ -229,11 +242,10 @@ public class Lienzo extends Canvas implements MouseInputListener {
         }
     }
 
-    /**
-     *
-     */
-    private void chkEnteros() {
+    private String chkEnteros() {
         boolean congruentes = false;
+        Vector<Pieza> alineados = new Vector();
+        //Sumo los angulos de las piezas
         Iterator it = mesa.iterator();
         Pieza patron = mesa.firstElement();
         int sumaAngulos = patron.getAngfinal();
@@ -246,17 +258,31 @@ public class Lienzo extends Canvas implements MouseInputListener {
                 // Chequeo que la pieza
                 if (patron.ckInnerAng(p.getAnginicial())) {
                     sumaAngulos = sumaAngulos + p.getAngfinal();
+                    alineados.add(p);
                     patron = p;
-                    congruentes = true;
-                } else {
-                    congruentes = false;
                 }
             }
         }
-        //Verifico la suma de los angulos
-        if (sumaAngulos == 360 && congruentes) {
-            System.out.println("Formaste un entero");
+        //Verifico que las piezas sean todas iguales
+        Color tmpColor = null;
+        try {
+            tmpColor = alineados.firstElement().getColor();
+        } catch (Exception e) {
         }
-
+        Iterator al = alineados.iterator();
+        while (al.hasNext()) {
+            Pieza tmp = (Pieza) al.next();
+            if (tmp.getColor().equals(tmpColor)) {
+                congruentes = true;
+            } else {
+                congruentes = false;
+            }
+        }
+        //Preparo la respuesta de la funcion
+        String tmp = null;
+        if (sumaAngulos == 360 && congruentes) {
+            tmp = alineados.firstElement().getClass().getSimpleName();
+        }
+        return tmp;
     }
 }
