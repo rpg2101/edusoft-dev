@@ -21,11 +21,11 @@ public class Intro {
     public Intro() {
         final JFrame frame = new JFrame("Proyecto Educativo");
         frame.setLayout(null);
-        frame.setBounds(0, 0, 1000, 550);
+        frame.setBounds(0, 0, 800, 600);
         frame.setResizable(false);
         Panelconfondo panel = new Panelconfondo("inicio.jpg");
         panel.setLayout(null);
-        panel.setBounds(20, 20, frame.getWidth()-40, frame.getHeight()-70);
+        panel.setBounds(20, 20, frame.getWidth()-50, frame.getHeight()-70);
         panel.setBackground(Color.LIGHT_GRAY);
         JButton sig = new JButton ("Iniciar");
         sig.setBounds((panel.getWidth()/2)-60, panel.getHeight()-50, 100, 30);

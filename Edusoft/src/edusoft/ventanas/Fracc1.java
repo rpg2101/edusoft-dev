@@ -23,11 +23,11 @@ class Fracc1 {
     public Fracc1 (){
         final JFrame frame = new JFrame("Proyecto Educativo - Fracciones");
         frame.setLayout(null);
-        frame.setBounds(0, 0, 1008, 725);
+        frame.setBounds(0, 0, 800, 600);
         frame.setResizable(false);
         Lienzo panel = new Lienzo();
         frame.setLayout(null);
-        panel.setBounds(20, 20, frame.getWidth()-40, frame.getHeight()-70);
+        panel.setBounds(20, 20, frame.getWidth()-50, frame.getHeight()-70);
         JButton sig = new JButton ("Salir");
         sig.setBounds(panel.getWidth()-120, panel.getHeight()-50, 100, 30);
         sig.addActionListener(new ActionListener() {
