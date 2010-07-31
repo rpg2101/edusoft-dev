@@ -18,6 +18,7 @@ import java.util.Iterator;
 import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.event.MouseInputListener;
 import piezas.*;
@@ -52,7 +53,7 @@ public class Lienzo extends Canvas implements MouseInputListener {
 
         // Genero el marco
         JFrame frame = new JFrame();
-        frame.setBounds(0, 0, 1008, 725);
+        frame.setBounds(0, 0, 800, 600);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setTitle("Fracciones");
@@ -82,14 +83,14 @@ public class Lienzo extends Canvas implements MouseInputListener {
                 RenderingHints.VALUE_ANTIALIAS_ON));
 
         // Titulo y Cartel de trofeos
-        g2.setFont(new Font("Serif", Font.BOLD, 30));
-        g2.drawString("Completar el entero usando piezas del mismo color",
-                80, 35);
         g2.setFont(new Font("Serif", Font.BOLD, 25));
-        g2.drawString("Combinaciones obtenidas:", 50, this.getHeight() - 210);
+        g2.drawString("Completar el entero usando piezas del mismo color",
+                40, 35);
+        g2.setFont(new Font("Serif", Font.BOLD, 20));
+        g2.drawString("Combinaciones obtenidas:", 20, this.getHeight() - 210);
 
         //Dibujo el recuadro mas grande
-        g2.drawRect(getWidth() - 240, 60, 220, 620);
+        g2.drawRect(getWidth() - 190, 60, 165, 480);
 
         // Rutina que dibuja los trofeos
         Iterator tr = trofeos.iterator();
@@ -114,11 +115,11 @@ public class Lienzo extends Canvas implements MouseInputListener {
     }
 
     private void trofeoCuarto() {
-        trofeos.add(new Trofeo(260, this.getHeight() - 170, 150, "trofeo_cuarto.png"));
+        trofeos.add(new Trofeo(200, this.getHeight() - 170, 150, "trofeo_cuarto.png"));
     }
 
     private void trofeoOctavo() {
-        trofeos.add(new Trofeo(490, this.getHeight() - 170, 150, "trofeo_octavo.png"));
+        trofeos.add(new Trofeo(370, this.getHeight() - 170, 150, "trofeo_octavo.png"));
     }
 
     public void mouseClicked(MouseEvent me) {
@@ -208,11 +209,14 @@ public class Lienzo extends Canvas implements MouseInputListener {
             }
             //Ventana de anuncio
             JFrame f = new JFrame("Fracciones");
-            f.setBounds(getWidth() / 2 - 100, getHeight() / 2 - 100, 200, 200);
+            f.setBounds(getWidth() / 2 - 100, getHeight() / 2 - 100, 200, 150);
             f.setResizable(false);
             JPanel p = new JPanel();
-            JButton b = new JButton("Siguente");
+            JLabel l = new JLabel();
+            l.setText("!Muy Bien¡\n"+"\n!Así se hace!");
+            JButton b = new JButton("Continuar");
             p.add(b);
+            p.add(l);
             f.add(p);
             f.setVisible(true);
         } catch (Exception e) {
@@ -220,10 +224,10 @@ public class Lienzo extends Canvas implements MouseInputListener {
     }
 
     private void generarPiezas() {
-        int x_pos = getWidth() - 30;
-        int y_pos = 65;
+        int x_pos = getWidth() - 190;
+        int y_pos = 70;
         //Medio 
-        mesa.add(new Medio(100, 150, 90, this));
+        mesa.add(new Medio(80, 100, 90, this));
 
         int ainicial = 90;
         //Medios
@@ -233,14 +237,14 @@ public class Lienzo extends Canvas implements MouseInputListener {
         }
         //Cuartos
         ainicial = 90;
-        y_pos = y_pos + 205;
+        y_pos = y_pos + 155;
         for (int i = 0; i < 4; i++) {
             mesa.add(new Cuarto(x_pos, y_pos, ainicial, this));
             ainicial = ainicial + 90;
         }
         //Octavos
         ainicial = 90;
-        y_pos = y_pos + 205;
+        y_pos = y_pos + 155;
         for (int i = 0; i < 8; i++) {
             mesa.add(new Octavo(x_pos, y_pos, ainicial, this));
             ainicial = ainicial + 45;
