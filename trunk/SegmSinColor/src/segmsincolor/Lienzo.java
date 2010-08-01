@@ -163,7 +163,6 @@ public class Lienzo extends Canvas implements MouseInputListener {
          * Aqui inspeccionamos todas las piezas en la mesa buscando la que
          * tenga el area que coincida con el x e y del mouse.
          */
-        System.out.println(sobrePieza);
         Iterator mesaitr = mesa.iterator();
         while (mesaitr.hasNext()) {
             Pieza tmp = (Pieza) mesaitr.next();
@@ -208,25 +207,29 @@ public class Lienzo extends Canvas implements MouseInputListener {
                 trofeoOctavo();
             }
             //Ventana de anuncio
-            JFrame f = new JFrame("Fracciones");
-            f.setBounds(getWidth() / 2 - 100, getHeight() / 2 - 100, 200, 150);
-            f.setResizable(false);
-            JPanel p = new JPanel();
-            JLabel l = new JLabel();
-            l.setText("!Muy Bien¡\n"+"\n!Así se hace!");
-            JButton b = new JButton("Continuar");
-            p.add(b);
-            p.add(l);
-            f.add(p);
-            f.setVisible(true);
+            ventanaEntero();
         } catch (Exception e) {
         }
+    }
+
+    private void ventanaEntero() {
+        JFrame f = new JFrame("Fracciones");
+        f.setBounds(getWidth() / 2 - 100, getHeight() / 2 - 100, 200, 100);
+        f.setResizable(false);
+        JPanel p = new JPanel();
+        JLabel l = new JLabel();
+        l.setText("!Muy Bien¡\n" + "\n!Así se hace!");
+        JButton b = new JButton("Continuar");
+        p.add(b);
+        p.add(l);
+        f.add(p);
+        f.setVisible(true);
     }
 
     private void generarPiezas() {
         int x_pos = getWidth() - 190;
         int y_pos = 70;
-        //Medio 
+        //Medio Patron
         mesa.add(new Medio(80, 100, 90, this));
 
         int ainicial = 90;
