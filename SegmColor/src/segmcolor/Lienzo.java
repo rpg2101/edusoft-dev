@@ -117,7 +117,7 @@ public class Lienzo extends Canvas implements MouseInputListener {
             zonas.get(i).pintarse(g2);
         }
 
-        Iterator p = piezas.iterator();
+        Iterator p = mesa.iterator();
         while (p.hasNext()) {
             Pieza segmento = (Pieza) p.next();
             segmento.pintarse(g2);
@@ -235,7 +235,7 @@ public class Lienzo extends Canvas implements MouseInputListener {
         y_pos = y_pos + 200;
         x_pos = 100;
         for (int i = 0; i < 6; i++) {
-            piezas.add(new Secto(x_pos, y_pos, ainicial, this));
+            piezas.add(new Sexto(x_pos, y_pos, ainicial, this));
             ainicial = ainicial + 60;
         }
         //Octavos
