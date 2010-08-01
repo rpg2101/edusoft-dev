@@ -15,11 +15,13 @@ public class ZonaPlayer extends Rectangle {
 
     private int cant_enteros;
     private Vector<Pieza> entero;
+    private String nombre;
 
     public ZonaPlayer(int x0, int y0, int ancho, int alto) {
         super(x0, y0, ancho, alto);
         cant_enteros = 0;
         entero = new Vector();
+        nombre = "Jugador";
     }
 
     public int getCantEnteros() {
@@ -31,14 +33,11 @@ public class ZonaPlayer extends Rectangle {
     }
 
     public void pintarse(Graphics2D g) {
-        Iterator itr = entero.iterator();
-        while(itr.hasNext()){
-            Pieza p = (Pieza)itr.next();
-            p.pintarse(g);
-        }
-        g.setFont(new Font("Times", Font.TRUETYPE_FONT, 24));
+        // Dibuja los carteles
+        g.setFont(new Font("Times", Font.TRUETYPE_FONT, 20));
         g.drawString("Enteros: " + String.valueOf(cant_enteros),
-                (int) this.getX() + 55, (int) this.getMaxY() - 10);
+                (int) getX() + 40, (int) getMaxY() - 5);
+        g.drawString(nombre, (int) getX() + 40, (int) getMaxY() + 25);
         g.draw(this);
     }
 
@@ -56,7 +55,7 @@ public class ZonaPlayer extends Rectangle {
         }
     }
 
-    public Vector getEntero(){
+    public Vector getEntero() {
         return entero;
     }
 }
