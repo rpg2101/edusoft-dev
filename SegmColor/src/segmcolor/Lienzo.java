@@ -32,11 +32,11 @@ public class Lienzo extends Canvas implements MouseInputListener {
     private Vector<Pieza> mesa;
     private Vector<ZonaPlayer> zonas;
     private int piezasEnjuego;
-    private Image imagen;
+    private boolean sobrePieza;
 
     public Lienzo() {
         // Defino dimiensiones y color de fondo
-        this.setBounds(0, 0, 1008, 725);
+        this.setBounds(0, 0, 800, 600);
         this.setBackground(Color.WHITE);
 
         // Agrego los MouseListener
@@ -52,14 +52,14 @@ public class Lienzo extends Canvas implements MouseInputListener {
         generarPiezas();
 
         //Genero las zonas de juegos
-        zonas.add(new ZonaPlayer(20, 350, 227, 300));
-        zonas.add(new ZonaPlayer(262, 350, 227, 300));
-        zonas.add(new ZonaPlayer(503, 350, 227, 300));
-        zonas.add(new ZonaPlayer(745, 350, 227, 300));
+        zonas.add(new ZonaPlayer(20, 350, 170, 190));
+        zonas.add(new ZonaPlayer(212, 350, 170, 190));
+        zonas.add(new ZonaPlayer(405, 350, 170, 190));
+        zonas.add(new ZonaPlayer(597, 350, 170, 190));
 
         // Genero el marco
         JFrame frame = new JFrame();
-        frame.setBounds(0, 0, 1008, 725);
+        frame.setBounds(0, 0, 800, 600);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setTitle("Fracciones");
@@ -83,22 +83,22 @@ public class Lienzo extends Canvas implements MouseInputListener {
         Random gene = new Random();
         for (int i = mesa.size(); i < 3; i++) {
             Pieza tmp = piezas.remove(gene.nextInt(piezas.size()));
-            tmp.setPosicion(150 + (250 * i), getHeight() / 6);
+            tmp.setPosicion(150 + (150 * i), getHeight() / 6);
             mesa.add(tmp);
             piezasEnjuego++;
         }
     }
 
-   @Override
-    public void update(Graphics g) {
-        paint(g);
-    }
-
+//   @Override
+//    public void update(Graphics g) {
+//        paint(g);
+//    }
     @Override
     public void paint(Graphics g) {
         //Preparo el graphics
-        Image image = createImage(WIDTH,HEIGHT);
-        Graphics2D g2 = (Graphics2D) image.getGraphics();
+//        Image image = createImage(WIDTH,HEIGHT);
+        Graphics2D g2 = (Graphics2D) g;
+
         //Dibujo los elementos
         g2.setStroke(new BasicStroke(2.0f, BasicStroke.CAP_BUTT,
                 BasicStroke.JOIN_MITER));
@@ -106,23 +106,23 @@ public class Lienzo extends Canvas implements MouseInputListener {
                 RenderingHints.VALUE_ANTIALIAS_ON));
 
         // Titulo
-        g.setFont(new Font("Serif", Font.BOLD, 30));
-        g.drawString("Armar enteros usando las piezas", getX() + 220, getY() + 35);
+        g.setFont(new Font("Serif", Font.BOLD, 27));
+        g.drawString("Armar enteros usando las piezas", getX() + 150, getY() + 35);
 
         //Dibujo el recuadro mas grande
-        g2.drawRect(20, 50, 950, 280);
+        g2.drawRect(20, 50, getWidth() - 40, 280);
 
         //Dibujo las zonas de juego
         for (int i = 0; i < 4; i++) {
             zonas.get(i).pintarse(g2);
         }
 
-        Iterator p = mesa.iterator();
+        Iterator p = piezas.iterator();
         while (p.hasNext()) {
             Pieza segmento = (Pieza) p.next();
             segmento.pintarse(g2);
         }
-        g.drawImage(image, 0, 0, null);
+        //g.drawImage(image, 0, 0, null);
     }
 
     public void mouseClicked(MouseEvent me) {
@@ -174,8 +174,10 @@ public class Lienzo extends Canvas implements MouseInputListener {
                     (tmp.getY()) - me.getY());
             if (tmp.segArrastre().contains(this.areaMouse(me))) {
                 tmp.actulizaPosicion(me);
+                sobrePieza = true;
             } else {
                 tmp.setPressOut(true);
+                sobrePieza = false;
             }
         }
     }
@@ -188,10 +190,12 @@ public class Lienzo extends Canvas implements MouseInputListener {
         Iterator mesaitr = mesa.iterator();
         while (mesaitr.hasNext()) {
             Pieza tmp = (Pieza) mesaitr.next();
-            if (tmp.segArrastre().contains(me.getX(), me.getY())) {
+            if (tmp.segArrastre().contains(me.getX(), me.getY()) && sobrePieza) {
                 tmp.actulizaPosicion(me);
+                sobrePieza = false;
             } else {
                 tmp.setPressOut(false);
+                sobrePieza = true;
             }
             //Alinea piezas a las zonas de juego
             for (int i = 0; i < 4; i++) {
@@ -201,12 +205,11 @@ public class Lienzo extends Canvas implements MouseInputListener {
                 }
             }
         }
-        System.out.println(" Release juego " + piezasEnjuego);
     }
 
     private void generarPiezas() {
-        int x_pos = 200;
-        int y_pos = 200;
+        int x_pos = 100;
+        int y_pos = 100;
         //Medios
         int ainicial = 90;
         for (int i = 0; i < 2; i++) {
@@ -215,30 +218,36 @@ public class Lienzo extends Canvas implements MouseInputListener {
         }
         //Tercios
         ainicial = 90;
+        x_pos = x_pos + 190;
         for (int i = 0; i < 3; i++) {
             piezas.add(new Tercio(x_pos, y_pos, ainicial, this));
             ainicial = ainicial + 120;
         }
         //Cuartos
         ainicial = 90;
+        x_pos = x_pos + 190;
         for (int i = 0; i < 4; i++) {
             piezas.add(new Cuarto(x_pos, y_pos, ainicial, this));
             ainicial = ainicial + 90;
         }
         //Sectos
         ainicial = 90;
+        y_pos = y_pos + 200;
+        x_pos = 100;
         for (int i = 0; i < 6; i++) {
             piezas.add(new Secto(x_pos, y_pos, ainicial, this));
             ainicial = ainicial + 60;
         }
         //Octavos
         ainicial = 90;
+        x_pos = x_pos + 200;
         for (int i = 0; i < 8; i++) {
             piezas.add(new Octavo(x_pos, y_pos, ainicial, this));
             ainicial = ainicial + 45;
         }
         //Doceavos
         ainicial = 90;
+        x_pos = x_pos + 200;
         for (int i = 0; i < 12; i++) {
             piezas.add(new Doceavo(x_pos, y_pos, ainicial, this));
             ainicial = ainicial + 30;

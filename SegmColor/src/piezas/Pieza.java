@@ -19,18 +19,19 @@ import segmcolor.Lienzo;
  */
 public abstract class Pieza {
 
-    private int x, y, last_x, last_y;
+    private int x, y, x_ini, y_ini, last_x, last_y;
     final private int tamelipse;
     private int anginicial, angfinal;
     private Color color;
     private Lienzo lienzo;
-    private boolean pressOut;
+    private boolean pressOut, isPatron;
 
     public Pieza(int x0, int y0, int aini, Lienzo l) {
         pressOut = true;
-        x = x0;
-        y = y0;
-        tamelipse = 200;
+        isPatron = false;
+        x = x_ini = x0;
+        y = y_ini = y0;
+        tamelipse = 150;
         anginicial = aini;
         lienzo = l;
     }
@@ -49,6 +50,7 @@ public abstract class Pieza {
                 RenderingHints.VALUE_ANTIALIAS_ON));
         g2.draw(new Arc2D.Float(x, y, tamelipse, tamelipse, anginicial,
                 angfinal, Arc2D.PIE));
+        g2.draw(segArrastre());
     }
 
     /**
@@ -99,6 +101,11 @@ public abstract class Pieza {
         angfinal = afinal;
     }
 
+    public boolean ckInnerAng(int ang) {
+        Integer integer = Integer.valueOf(ang);
+        return integer.equals(anginicial + angfinal);
+    }
+
     /**
      * @param color the color to set
      */
@@ -125,6 +132,14 @@ public abstract class Pieza {
         return pressOut;
     }
 
+    public void setPatron(boolean flag) {
+        isPatron = flag;
+    }
+
+    public boolean getPatron() {
+        return isPatron;
+    }
+
     public void setLastPosicion(int x0, int y0) {
         last_x = x0;
         last_y = y0;
@@ -133,6 +148,10 @@ public abstract class Pieza {
     public void setPosicion(int x0, int y0) {
         x = x0;
         y = y0;
+    }
+
+    public void resetPosicion() {
+        setPosicion(x_ini, y_ini);
     }
 
     public void actulizaPosicion(MouseEvent m) {
@@ -144,7 +163,6 @@ public abstract class Pieza {
         checkArea();
         lienzo.repaint();
     }
-
 
     /**
      * Este metodo verifica que la figura no abandone el area de la ventana
