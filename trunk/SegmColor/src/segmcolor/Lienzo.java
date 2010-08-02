@@ -4,6 +4,8 @@
  */
 package segmcolor;
 
+
+import piezas.*;
 import java.awt.BasicStroke;
 import java.awt.Canvas;
 import java.awt.Color;
@@ -11,7 +13,7 @@ import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
+
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
@@ -20,7 +22,7 @@ import java.util.Random;
 import java.util.Vector;
 import javax.swing.JFrame;
 import javax.swing.event.MouseInputListener;
-import piezas.*;
+
 
 /**
  *
