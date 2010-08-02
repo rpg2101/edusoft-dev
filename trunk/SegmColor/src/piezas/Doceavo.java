@@ -10,7 +10,7 @@ import segmcolor.Lienzo;
 
 /**
  *
- * @author curio
+ * @author Hector Rattis
  */
 public class Doceavo extends Pieza {
 
