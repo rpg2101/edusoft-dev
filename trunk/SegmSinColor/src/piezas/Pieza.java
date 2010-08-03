@@ -4,9 +4,11 @@
  */
 package piezas;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Arc2D;
 import segmsincolor.Lienzo;
@@ -17,7 +19,7 @@ import segmsincolor.Lienzo;
  */
 public abstract class Pieza {
 
-    private int x, y, last_x, last_y, x_ini, y_ini;
+    private int x, y, x_ini, y_ini, last_x, last_y;
     final private int tamelipse;
     private int anginicial, angfinal;
     private Color color;
@@ -42,6 +44,10 @@ public abstract class Pieza {
         g2.fill(new Arc2D.Float(x, y, tamelipse, tamelipse, anginicial,
                 angfinal, Arc2D.PIE));
         g2.setColor(Color.black);
+        g2.setStroke(new BasicStroke(2.0f, BasicStroke.CAP_BUTT,
+                BasicStroke.JOIN_MITER));
+        g2.setRenderingHints(new RenderingHints(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON));
         g2.draw(new Arc2D.Float(x, y, tamelipse, tamelipse, anginicial,
                 angfinal, Arc2D.PIE));
         g2.draw(segArrastre());
@@ -91,13 +97,10 @@ public abstract class Pieza {
     /**
      * @return the angfinal
      */
-    protected void setAngfinal(int afinal) {
+    public void setAngfinal(int afinal) {
         angfinal = afinal;
     }
 
-    /**
-     * Devuelve el angulo interior del segmento
-     */
     public boolean ckInnerAng(int ang) {
         Integer integer = Integer.valueOf(ang);
         return integer.equals(anginicial + angfinal);
@@ -129,10 +132,6 @@ public abstract class Pieza {
         return pressOut;
     }
 
-    /**
-     * Seteo la bandera que indica si la pieza es Patron
-     * @param flag
-     */
     public void setPatron(boolean flag) {
         isPatron = flag;
     }
