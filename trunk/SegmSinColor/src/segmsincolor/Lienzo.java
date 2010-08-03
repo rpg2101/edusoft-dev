@@ -217,9 +217,9 @@ public class Lienzo extends Canvas implements MouseInputListener {
             }
             if (enteroschk.equals("Octavo")) {
                 trofeos.add(new Trofeo(370, this.getHeight() - 170, 150, "trofeo_octavo.png"));
-                premios[3] = true;
+                premios[2] = true;
             }
-            if (enteroschk.equals("nulo")) {
+            if (enteroschk.equals("null")) {
                 ventanaEntero("Prueba de nuevo");
             }
             //Ventana de anuncio
@@ -331,12 +331,13 @@ public class Lienzo extends Canvas implements MouseInputListener {
         if (sumaAngulos == 360 && congruentes) {
             tmp = alineados.firstElement().getClass().getSimpleName();
         }
+        System.out.println("tmp " + tmp + " suma " + sumaAngulos);
         return tmp;
     }
 
     private void ventanaEntero(String mensaje) {
         final JFrame f = new JFrame("Fracciones");
-        f.setBounds(getWidth() / 2 - 100, getHeight() / 2 - 100, 200, 100);
+        f.setBounds(getWidth() / 2 - 100, getHeight() / 2 - 100, 250, 100);
         f.setResizable(false);
         JPanel p = new JPanel();
         JLabel l = new JLabel();
@@ -346,6 +347,9 @@ public class Lienzo extends Canvas implements MouseInputListener {
             public void actionPerformed(ActionEvent ae) {
                 resetPiezas();
                 f.setVisible(false);
+                if (premios[0] && premios[1] && premios[2]){
+                    System.exit(0);
+                }
             }
         });
         p.add(b);
@@ -353,4 +357,5 @@ public class Lienzo extends Canvas implements MouseInputListener {
         f.add(p);
         f.setVisible(true);
     }
+
 }
