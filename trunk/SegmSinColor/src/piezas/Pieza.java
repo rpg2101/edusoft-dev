@@ -50,7 +50,6 @@ public abstract class Pieza {
                 RenderingHints.VALUE_ANTIALIAS_ON));
         g2.draw(new Arc2D.Float(x, y, tamelipse, tamelipse, anginicial,
                 angfinal, Arc2D.PIE));
-        g2.draw(segArrastre());
     }
 
     /**
