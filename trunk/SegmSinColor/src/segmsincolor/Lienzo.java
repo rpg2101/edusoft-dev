@@ -11,6 +11,7 @@ import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
@@ -36,6 +37,8 @@ public class Lienzo extends Canvas implements MouseInputListener {
     private Vector<Pieza> mesa;
     private boolean sobrePieza;
     private boolean[] premios;
+    private Image imag;
+    private Graphics gBuffer;
 
     public Lienzo() {
         // Defino dimiensiones y color de fondo
@@ -74,14 +77,21 @@ public class Lienzo extends Canvas implements MouseInputListener {
         return mesa;
     }
 
-//    @Override
-//    public void update(Graphics g){
-//        paint(g);
-//    }
+    @Override
+    public void update(Graphics g) {
+        if (getGB() == null) {
+            imag = createImage(getWidth(), getHeight());
+            setGB(imag.getGraphics());
+        }
+        getGB().setColor(getBackground());
+        getGB().fillRect(0, 0, getWidth(), getHeight());
+        //Llamamos a paint
+        paint(getGB());
+        g.drawImage(imag, 0, 0, null);
+    }
+
     @Override
     public void paint(Graphics g) {
-        //Preparo el graphics
-        //BufferedImage imagen = (BufferedImage)createImage(WIDTH,HEIGHT);
         Graphics2D g2 = (Graphics2D) g;
 
         //Dibujo los elementos
@@ -89,7 +99,7 @@ public class Lienzo extends Canvas implements MouseInputListener {
                 BasicStroke.JOIN_MITER));
         g2.setRenderingHints(new RenderingHints(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON));
-
+         g2.setColor(Color.BLACK);
         // Titulo y Cartel de trofeos
         g2.setFont(new Font("Serif", Font.BOLD, 25));
         g2.drawString("Completar el entero usando piezas del mismo color",
@@ -104,7 +114,7 @@ public class Lienzo extends Canvas implements MouseInputListener {
         Iterator tr = trofeos.iterator();
         while (tr.hasNext()) {
             Trofeo tmp = (Trofeo) tr.next();
-            tmp.pintarse(g, this);
+            tmp.pintarse(g2, this);
         }
 
         // Rutina que dibuja las piezas
@@ -113,21 +123,6 @@ public class Lienzo extends Canvas implements MouseInputListener {
             Pieza segmento = (Pieza) p.next();
             segmento.pintarse(g2);
         }
-        //g2.drawImage(imagen, this, 0, 0);
-
-    }
-
-    //Metodos que adiciona los trofeos a la imagen
-    private void trofeoMedio() {
-    }
-
-    private void trofeoCuarto() {
-    }
-
-    private void trofeoOctavo() {
-    }
-
-    private void trofeonull() {
     }
 
     public void mouseClicked(MouseEvent me) {
@@ -210,16 +205,19 @@ public class Lienzo extends Canvas implements MouseInputListener {
             if (enteroschk.equals("Medio")) {
                 trofeos.add(new Trofeo(30, this.getHeight() - 170, 150, "trofeo_medio.png"));
                 premios[0] = true;
+                ventanaEntero("¡Muy Bien! ¡Asi se hace!");
             }
             if (enteroschk.equals("Cuarto")) {
                 trofeos.add(new Trofeo(200, this.getHeight() - 170, 150, "trofeo_cuarto.png"));
                 premios[1] = true;
+                ventanaEntero("¡Muy Bien! ¡Asi se hace!");
             }
             if (enteroschk.equals("Octavo")) {
                 trofeos.add(new Trofeo(370, this.getHeight() - 170, 150, "trofeo_octavo.png"));
                 premios[2] = true;
+                ventanaEntero("¡Muy Bien! ¡Asi se hace!");
             }
-            if (enteroschk.equals("null")) {
+            if (enteroschk.equals("distintoColor")) {
                 ventanaEntero("Prueba de nuevo");
             }
             //Ventana de anuncio
@@ -306,11 +304,9 @@ public class Lienzo extends Canvas implements MouseInputListener {
             //Seleccione solo las piezas alineadas a la pieza patron
             if (p.getX() == patron.getX() && p.getY() == patron.getY()) {
                 // Chequeo que la pieza
-                if (patron.ckInnerAng(p.getAnginicial())) {
-                    sumaAngulos = sumaAngulos + p.getAngfinal();
-                    alineados.add(p);
-                    patron = p;
-                }
+                sumaAngulos = sumaAngulos + p.getAngfinal();
+                alineados.add(p);
+                patron = p;
             }
         }
         //Verifico que las piezas sean todas iguales
@@ -328,26 +324,33 @@ public class Lienzo extends Canvas implements MouseInputListener {
         }
         //Preparo la respuesta de la funcion
         String tmp = "nulo";
-        if (sumaAngulos == 360 && congruentes) {
-            tmp = alineados.firstElement().getClass().getSimpleName();
+        if (sumaAngulos == 360) {
+            if (congruentes) {
+                tmp = alineados.firstElement().getClass().getSimpleName();
+            } else {
+                tmp = "distintoColor";
+            }
         }
-        System.out.println("tmp " + tmp + " suma " + sumaAngulos);
         return tmp;
     }
 
     private void ventanaEntero(String mensaje) {
         final JFrame f = new JFrame("Fracciones");
-        f.setBounds(getWidth() / 2 - 100, getHeight() / 2 - 100, 250, 100);
+        f.setBounds(getWidth() / 2 - 100, getHeight() / 2 - 100, 290, 100);
         f.setResizable(false);
         JPanel p = new JPanel();
+        p.setLayout(null);
         JLabel l = new JLabel();
+        l.setBounds(40, 3, 200, 50);
         l.setText(mensaje);
         JButton b = new JButton("Continuar");
+        b.setBounds(85, 45, 100, 25);
         b.addActionListener(new ActionListener() {
+
             public void actionPerformed(ActionEvent ae) {
                 resetPiezas();
                 f.setVisible(false);
-                if (premios[0] && premios[1] && premios[2]){
+                if (premios[0] && premios[1] && premios[2]) {
                     System.exit(0);
                 }
             }
@@ -358,4 +361,11 @@ public class Lienzo extends Canvas implements MouseInputListener {
         f.setVisible(true);
     }
 
+    private Graphics getGB() {
+        return gBuffer;
+    }
+
+    private void setGB(Graphics graphics) {
+        gBuffer = graphics;
+    }
 }
