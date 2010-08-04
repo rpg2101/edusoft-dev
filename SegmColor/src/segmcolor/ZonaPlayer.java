@@ -42,7 +42,22 @@ public class ZonaPlayer extends Rectangle {
     }
 
     public void addSegmento(Pieza p) {
-        entero.add(p);
+        if (!entero.isEmpty()) {
+            Iterator it = entero.iterator();
+            try {
+                while (it.hasNext()) {
+                    Pieza tmp = (Pieza) it.next();
+                    if (!tmp.equals(p)) {
+                        System.out.println("Añadido " + p + " numero de piezas " + entero.size());
+                        entero.add(p);
+                    }
+                }
+            } catch (Exception e) {
+            }
+        } else {
+            System.out.println("Añadido " + p + " numero de piezas " + entero.size());
+            entero.add(p);
+        }
     }
 
     public void removeSegmento(Pieza p) {
@@ -57,5 +72,26 @@ public class ZonaPlayer extends Rectangle {
 
     public Vector getEntero() {
         return entero;
+    }
+
+    private boolean chkEnteros() {
+        //Sumo los angulos de las piezas
+        int sumaAngulos = 0;
+        Iterator it = entero.iterator();
+        while (it.hasNext()) {
+            Pieza p = (Pieza) it.next();
+            //Seleccione solo las piezas alineadas a la pieza patron
+            // Chequeo que la pieza
+            sumaAngulos = sumaAngulos + p.getAngfinal();
+        }
+
+        //Preparo la respuesta de la funcion
+        boolean tmp = false;
+        if (sumaAngulos == 360) {
+            tmp = true;
+        }
+
+        // Devuelvo el resultado
+        return tmp;
     }
 }
