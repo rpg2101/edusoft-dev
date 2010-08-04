@@ -13,6 +13,7 @@ import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
@@ -35,6 +36,8 @@ public class Lienzo extends Canvas implements MouseInputListener {
     private Vector<ZonaPlayer> zonas;
     private int piezasEnjuego;
     private boolean sobrePieza;
+    private Image imag;
+    private Graphics gBuffer;
 
     public Lienzo() {
         // Defino dimiensiones y color de fondo
@@ -83,7 +86,7 @@ public class Lienzo extends Canvas implements MouseInputListener {
      */
     public void repartir() {
         Random gene = new Random();
-        for (int i = mesa.size(); i < 3; i++) {
+        for (int i = 0; i < 3; i++) {
             Pieza tmp = piezas.remove(gene.nextInt(piezas.size()));
             tmp.setPosicion(150 + (150 * i), getHeight() / 6);
             mesa.add(tmp);
@@ -91,21 +94,31 @@ public class Lienzo extends Canvas implements MouseInputListener {
         }
     }
 
-//   @Override
-//    public void update(Graphics g) {
-//        paint(g);
-//    }
+    @Override
+    public void update(Graphics g) {
+        if (getGB() == null) {
+            imag = createImage(getWidth(), getHeight());
+            setGB(imag.getGraphics());
+        }
+        getGB().setColor(getBackground());
+        getGB().fillRect(0, 0, getWidth(), getHeight());
+
+        //Llamamos a paint
+        paint(getGB());
+        g.drawImage(imag, 0, 0, null);
+    }
+
     @Override
     public void paint(Graphics g) {
         //Preparo el graphics
-//        Image image = createImage(WIDTH,HEIGHT);
         Graphics2D g2 = (Graphics2D) g;
 
-        //Dibujo los elementos
+        //Preparo las opciones del Graphics2D
         g2.setStroke(new BasicStroke(2.0f, BasicStroke.CAP_BUTT,
                 BasicStroke.JOIN_MITER));
         g2.setRenderingHints(new RenderingHints(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON));
+        g2.setColor(Color.BLACK);
 
         // Titulo
         g.setFont(new Font("Serif", Font.BOLD, 27));
@@ -113,6 +126,11 @@ public class Lienzo extends Canvas implements MouseInputListener {
 
         //Dibujo el recuadro mas grande
         g2.drawRect(20, 50, getWidth() - 40, 280);
+
+        //Dibujo el boton de repartir
+        g2.setFont(new Font("Serif", Font.BOLD, 18));
+        g2.drawRect(getWidth() - 110, 50, 90, 30);
+        g2.drawString("Repartir", getWidth() - 100, 70);
 
         //Dibujo las zonas de juego
         for (int i = 0; i < 4; i++) {
@@ -124,10 +142,13 @@ public class Lienzo extends Canvas implements MouseInputListener {
             Pieza segmento = (Pieza) p.next();
             segmento.pintarse(g2);
         }
-        //g.drawImage(image, 0, 0, null);
     }
 
     public void mouseClicked(MouseEvent me) {
+        Rectangle znRepartir = new Rectangle(getWidth() - 110, 50, 90, 30);
+        if (znRepartir.contains(me.getX(), me.getY())) {
+            repartir();
+        }
     }
 
     public void mouseEntered(MouseEvent me) {
@@ -206,7 +227,18 @@ public class Lienzo extends Canvas implements MouseInputListener {
                     zonas.get(i).addSegmento(tmp);
                 }
             }
+            Rectangle bigMesa = new Rectangle(20, 50, getWidth() - 40, 280);
+            if (bigMesa.contains(tmp.segArrastre())) {
+                for (int i = 0; i < 4; i++) {
+                    try{
+                    zonas.get(i).removeSegmento(tmp);
+                    }catch (Exception e){
+                        
+                    }
+                }
+            }
         }
+
     }
 
     private void generarPiezas() {
@@ -267,6 +299,24 @@ public class Lienzo extends Canvas implements MouseInputListener {
      * @param seg  segmento a alinear
      */
     private void alinearSegmZonas(Rectangle zona, Pieza seg) {
-        seg.setPosicion((int) zona.getX() + 14, (int) zona.getY() + 20);
+        seg.setPosicion((int) zona.getX() + 10, (int) zona.getY() + 10);
+        this.piezasEnjuego--;
+        repaint();
+    }
+
+    private void resetPiezas() {
+//        Iterator it = mesa.iterator();
+//        while (it.hasNext()) {
+//            ((Pieza) it.next()).resetPosicion();
+//        }
+//        repaint();
+    }
+
+    private Graphics getGB() {
+        return gBuffer;
+    }
+
+    private void setGB(Graphics gb) {
+        gBuffer = gb;
     }
 }
