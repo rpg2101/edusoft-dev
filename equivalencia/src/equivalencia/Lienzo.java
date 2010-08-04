@@ -22,6 +22,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.event.MouseInputListener;
 import equivalencia.piezas.*;
+import java.awt.Image;
 
 /**
  *
@@ -32,6 +33,8 @@ public class Lienzo extends Canvas implements MouseInputListener {
     private Vector<Trofeo> trofeos;
     private Vector<Pieza> mesa;
     private boolean sobrePieza;
+    private Image imag;
+    private Graphics gBuffer;
 
     public Lienzo() {
         // Defino dimiensiones y color de fondo
@@ -66,14 +69,23 @@ public class Lienzo extends Canvas implements MouseInputListener {
         return mesa;
     }
 
-//    @Override
-//    public void update(Graphics g){
-//        paint(g);
-//    }
+    @Override
+    public void update(Graphics g) {
+        if (getGB() == null) {
+            imag = createImage(getWidth(), getHeight());
+            setGB(imag.getGraphics());
+        }
+        getGB().setColor(getBackground());
+        getGB().fillRect(0, 0, getWidth(), getHeight());
+
+        //Llamamos a paint
+        paint(getGB());
+        g.drawImage(imag, 0, 0, null);
+    }
+
     @Override
     public void paint(Graphics g) {
         //Preparo el graphics
-        //BufferedImage imagen = (BufferedImage)createImage(WIDTH,HEIGHT);
         Graphics2D g2 = (Graphics2D) g;
 
         //Dibujo los elementos
@@ -81,13 +93,13 @@ public class Lienzo extends Canvas implements MouseInputListener {
                 BasicStroke.JOIN_MITER));
         g2.setRenderingHints(new RenderingHints(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON));
+        g2.setColor(Color.BLACK);
 
         // Titulo y Cartel de trofeos
-        g2.setFont(new Font("Serif", Font.BOLD, 20));
-        g2.drawString("¿Cuantas piezas de un color necesito para formar una pieza de otro color ?",
-                20, 35);
+        g2.setFont(new Font("Serif", Font.BOLD, 24));
+        g2.drawString("¿Cuantas piezas de un color necesito para formar otro medio?",
+                25, 35);
 
-        g2.setColor(Color.BLACK);
         // Rectangulo derecha
         g2.drawRect(this.getX() + 140, this.getY() + 55, 160, 160);
         // Rectangulo izquierda
@@ -100,7 +112,7 @@ public class Lienzo extends Canvas implements MouseInputListener {
         Iterator tr = trofeos.iterator();
         while (tr.hasNext()) {
             Trofeo tmp = (Trofeo) tr.next();
-            tmp.pintarse(g, this);
+            tmp.pintarse(g2, this);
         }
 
         // Rutina que dibuja las piezas
@@ -109,21 +121,6 @@ public class Lienzo extends Canvas implements MouseInputListener {
             Pieza segmento = (Pieza) p.next();
             segmento.pintarse(g2);
         }
-        //g2.drawImage(imagen, this, 0, 0);
-
-    }
-
-    //Metodos que adiciona los trofeos a la imagen
-    private void trofeoMedio() {
-        trofeos.add(new Trofeo(30, this.getHeight() - 170, 150, "trofeo_medio.png"));
-    }
-
-    private void trofeoCuarto() {
-        trofeos.add(new Trofeo(200, this.getHeight() - 170, 150, "trofeo_cuarto.png"));
-    }
-
-    private void trofeoOctavo() {
-        trofeos.add(new Trofeo(370, this.getHeight() - 170, 150, "trofeo_octavo.png"));
     }
 
     public void mouseClicked(MouseEvent me) {
@@ -200,20 +197,7 @@ public class Lienzo extends Canvas implements MouseInputListener {
             }
         }
         //Verifico que forme un entero y anuncio el resultado
-        try {
-            if (chkEnteros().equals("Medio")) {
-                trofeoMedio();
-            }
-            if (chkEnteros().equals("Cuarto")) {
-                trofeoCuarto();
-            }
-            if (chkEnteros().equals("Octavo")) {
-                trofeoOctavo();
-            }
-            //Ventana de anuncio
-            ventanaEntero();
-        } catch (Exception e) {
-        }
+
     }
 
     private void ventanaEntero() {
@@ -274,10 +258,18 @@ public class Lienzo extends Canvas implements MouseInputListener {
     private void alinearPatron(Pieza p) {
         Rectangle patron = new Rectangle(this.getX() + 490, this.getY() + 55, 160, 160);
         if (patron.contains(p.segArrastre())) {
-            p.setPosicion((int)patron.getX()+5,(int)patron.getY()+5);
+            p.setPosicion((int) patron.getX() + 5, (int) patron.getY() + 5);
         } else {
             p.resetPosicion();
         }
+    }
+
+    private Graphics getGB() {
+        return gBuffer;
+    }
+
+    private void setGB(Graphics gr) {
+        gBuffer = gr;
     }
 
     private String chkEnteros() {
