@@ -30,7 +30,7 @@ import javax.swing.event.MouseInputListener;
  * @author Hector Rattis
  */
 public class Lienzo extends Canvas implements MouseInputListener {
-
+    private JFrame frame;
     private Vector<Pieza> piezas;
     private Vector<Pieza> mesa;
     private Vector<ZonaPlayer> zonas;
@@ -63,13 +63,12 @@ public class Lienzo extends Canvas implements MouseInputListener {
         zonas.add(new ZonaPlayer(597, 350, 170, 190));
 
         // Genero el marco
-        JFrame frame = new JFrame();
+        frame = new JFrame();
         frame.setBounds(0, 0, 800, 600);
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setTitle("Fracciones");
         frame.add(this);
-        frame.setVisible(true);
     }
 
     public Vector<Pieza> getPiezas() {
@@ -78,6 +77,10 @@ public class Lienzo extends Canvas implements MouseInputListener {
 
     public Vector<Pieza> getMesa() {
         return mesa;
+    }
+
+    public Vector<ZonaPlayer> getZonas(){
+        return zonas;
     }
 
     /**
@@ -90,6 +93,7 @@ public class Lienzo extends Canvas implements MouseInputListener {
             Pieza tmp = piezas.remove(gene.nextInt(piezas.size()));
             tmp.setPosicion(150 + (150 * i), getHeight() / 6);
             mesa.add(tmp);
+            repaint();
             piezasEnjuego++;
         }
     }
@@ -225,6 +229,7 @@ public class Lienzo extends Canvas implements MouseInputListener {
                 if (zonas.get(i).contains(tmp.segArrastre())) {
                     alinearSegmZonas(zonas.get(i), tmp);
                     zonas.get(i).addSegmento(tmp);
+                    piezasEnjuego++;
                 }
             }
             Rectangle bigMesa = new Rectangle(20, 50, getWidth() - 40, 280);
@@ -232,6 +237,7 @@ public class Lienzo extends Canvas implements MouseInputListener {
                 for (int i = 0; i < 4; i++) {
                     try{
                     zonas.get(i).removeSegmento(tmp);
+                    piezasEnjuego--;
                     }catch (Exception e){
                         
                     }
@@ -318,5 +324,9 @@ public class Lienzo extends Canvas implements MouseInputListener {
 
     private void setGB(Graphics gb) {
         gBuffer = gb;
+    }
+
+    public void setVisibilidad(boolean flg){
+        frame.setVisible(true);
     }
 }
