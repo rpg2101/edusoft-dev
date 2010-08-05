@@ -32,6 +32,10 @@ public class ZonaPlayer extends Rectangle {
         cant_enteros++;
     }
 
+    public void setID(String name){
+        nombre = name;
+    }
+
     public void pintarse(Graphics2D g) {
         // Dibuja los carteles
         g.setFont(new Font("Times", Font.TRUETYPE_FONT, 20));
