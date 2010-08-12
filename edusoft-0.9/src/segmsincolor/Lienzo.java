@@ -14,6 +14,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -184,6 +185,7 @@ public class Lienzo extends Canvas implements MouseInputListener {
          * Aqui inspeccionamos todas las piezas en la mesa buscando la que
          * tenga el area que coincida con el x e y del mouse.
          */
+        Vector<Pieza> alineados = new Vector();
         Iterator mesaitr = mesa.iterator();
         while (mesaitr.hasNext()) {
             Pieza tmp = (Pieza) mesaitr.next();
@@ -191,6 +193,7 @@ public class Lienzo extends Canvas implements MouseInputListener {
                 tmp.actulizaPosicion(me);
                 //Alinea piezas al medio patron de juego
                 this.alinearPatron(tmp);
+                alineados.add(tmp);
                 sobrePieza = false;
             } else {
                 tmp.setPressOut(false);
@@ -202,6 +205,8 @@ public class Lienzo extends Canvas implements MouseInputListener {
             String enteroschk = chkEnteros();
             if (enteroschk.equals("Medio") || enteroschk.equals("Cuarto") || enteroschk.equals("Octavo")) {
                 if (enteroschk.equals("Medio")) {
+                    //Llama a la ventana de pregunta
+                    pregunta(enteroschk);
                     trofeos.add(new Trofeo(30, this.getHeight() - 170, 150, "trofeo_medio.png"));
                     premios[0] = true;
                 } else if (enteroschk.equals("Cuarto")) {
@@ -211,14 +216,14 @@ public class Lienzo extends Canvas implements MouseInputListener {
                     trofeos.add(new Trofeo(370, this.getHeight() - 170, 150, "trofeo_octavo.png"));
                     premios[2] = true;
                 }
-                ventanaEntero("¡Muy Bien! ¡Asi se hace!");
+                //
+                //ventanaEntero("¡Muy Bien! ¡Asi se hace!");
             } else if (enteroschk.equals("distintoColor")) {
                 ventanaEntero("Prueba de nuevo");
             }
 
         } catch (Exception e) {
         }
-
     }
 
     private void generarPiezas() {
@@ -328,7 +333,7 @@ public class Lienzo extends Canvas implements MouseInputListener {
 
     private void ventanaEntero(String mensaje) {
         final JFrame f = new JFrame("Fracciones");
-        f.setBounds(getWidth() / 2 - 100, getHeight() / 2 - 100, 290, 100);
+        f.setBounds(getWidth() / 2 - 100, getHeight() / 2 - 100, 270, 100);
         f.setResizable(false);
         JPanel p = new JPanel();
         p.setLayout(null);
@@ -353,6 +358,43 @@ public class Lienzo extends Canvas implements MouseInputListener {
         });
         p.add(b);
         p.add(l);
+        f.add(p);
+        f.setVisible(true);
+    }
+
+    private void pregunta(String tipo) {
+        final JFrame f = new JFrame("Fracciones");
+        f.setBounds(getWidth() / 2 - 100, getHeight() / 2 - 100, 270, 160);
+        f.setResizable(false);
+        JPanel p = new JPanel();
+        p.setLayout(null);
+        String str = "<html>" + "Cuantas piezas de mismo color" + "<br>"
+                + "necesitaste para armar un entero:" + "</html>";
+        JLabel mensaje = new JLabel(str);
+        mensaje.setBounds(27, 3, 230, 50);
+        final TextField npiezas = new TextField();
+        npiezas.setBounds(40, 50, 20, 20);
+        JLabel ld = new JLabel(" de  __");
+        ld.setBounds(65, 43, 50, 40);
+        TextField numerador = new TextField();
+        numerador.setBounds(90, 45, 20, 20);
+        TextField denominador = new TextField();
+        denominador.setBounds(90, 75, 20, 20);
+        JButton b = new JButton("Comprobar");
+        b.setBounds(55, f.getHeight() - 60, 150, 25);
+        b.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent ae) {
+                resetPiezas();
+                f.dispose();
+            }
+        });
+        p.add(b);
+        p.add(mensaje);
+        p.add(ld);
+        p.add(npiezas);
+        p.add(numerador);
+        p.add(denominador);
         f.add(p);
         f.setVisible(true);
     }
