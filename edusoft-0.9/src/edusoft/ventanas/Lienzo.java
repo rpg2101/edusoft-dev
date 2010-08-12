@@ -14,10 +14,14 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.Vector;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
+
 /**
  *
  * @author rpg
@@ -40,7 +44,6 @@ public class Lienzo extends Canvas {
     private int filos = 7;
     private int ndoblez;
     private int fraccion;
-    private String titulo;
 
     public Lienzo getLienzo() {
         return this;
@@ -80,22 +83,46 @@ public class Lienzo extends Canvas {
         }
         if (letrai && letrag && letrau && letraa && letral && letrae && letras) {
             final JDialog f = new JDialog();
-            f.setBounds(270, 250, 200, 200);
+            f.setBounds(100, 0, 600, 600);
             f.setVisible(true);
             f.setAlwaysOnTop(true);
             f.setLayout(null);
+
+            JLabel l1 = new JLabel("Cada parte recibe el nombre de \"medio\" ");
+            l1.setFont(new Font("Serif", Font.BOLD, 20));
+
+            JLabel l2 = new JLabel("Cada medio se representa numericamente");
+            l2.setFont(new Font("Serif", Font.BOLD, 20));
+
+            JLabel lnum = new JLabel("1    numerador ");
+            lnum.setFont(new Font("Serif", Font.BOLD, 40));
+
+            JLabel lden = new JLabel("2    denominador ");
+            lden.setFont(new Font("Serif", Font.BOLD, 40));
+
+
+            l1.setBounds(50, 20, 500, 50);
+            l2.setBounds(50, 200, 500, 20);
+            lnum.setBounds(90, 250, 500, 60);
+            lden.setBounds(90, 300, 500, 60);
+
             JButton b = new JButton("Continuar");
             b.addActionListener(new ActionListener() {
 
                 public void actionPerformed(ActionEvent e) {
+
                     f.setVisible(false);
                     getLienzo().armarRect(elemento, 1);
+                    fraccion++;
                     repaint();
                 }
             });
-            b.setBounds(13, 110, 165, 50);
+            b.setBounds(f.getWidth() / 2 - 100, f.getHeight() - 120, 165, 50);
             f.add(b);
-            this.fraccion++;
+            f.add(l1);
+            f.add(l2);
+            f.add(lnum);
+            f.add(lden);
             this.comoson = false;
             this.letrai = false;
             this.letrag = false;
@@ -203,7 +230,6 @@ public class Lienzo extends Canvas {
 
     public Lienzo() {
         setBackground(Color.BLACK);
-        this.titulo = "Doblar el papel en partes iguales";
         basepapel0 = new ImageIcon(getClass().getResource("basepapel0.png")).getImage();
         solapa = new ImageIcon(getClass().getResource("solapa.png")).getImage();
         pliegue = new ImageIcon(getClass().getResource("pliegue.png")).getImage();
@@ -246,7 +272,13 @@ public class Lienzo extends Canvas {
         getGB().fillRect(0, 0, getWidth(), getHeight());
         getGB().setColor(Color.BLACK);
         getGB().setFont(new Font("Serif", Font.BOLD, 30));
-        getGB().drawString(titulo, margenx, 50);
+        if (fraccion == 0) {
+            getGB().drawString("Doblar el papel en dos partes iguales", margenx, 50);
+        } else if (fraccion == 1) {
+            getGB().drawString("Doblar el papel en cuatro partes iguales", margenx, 50);
+        } else if (fraccion == 2) {
+            getGB().drawString("Doblar el papel en ocho partes iguales", margenx, 50);
+        }
 
         for (int i0 = 0; i0 < getElem().size(); i0++) {
             if ((Integer) getElem().elementAt(i0).get(0) == 0) {
@@ -301,7 +333,7 @@ public class Lienzo extends Canvas {
                 getGB().setFont(new Font("Serif", Font.BOLD, 30));
                 getGB().drawString("¿ Como son las partes ? ", 50, 420);
                 getGB().setFont(new Font("Serif", Font.BOLD, 50));
-                getGB().drawString("   _  _  _  _  _    ", 180, 500);
+
                 if (letrai) {
                     getGB().drawString("I", 180, 500);
                 }
@@ -445,25 +477,25 @@ public class Lienzo extends Canvas {
                     aux4.add(alto);
                     Vector<Integer> aux5 = new Vector<Integer>();
                     aux5.add(4);
-                    aux5.add(anchopatron/8 + margenx + 6);
+                    aux5.add(anchopatron / 8 + margenx + 6);
                     aux5.add(margeny);
                     aux5.add(5);
                     aux5.add(alto);
                     Vector<Integer> aux6 = new Vector<Integer>();
                     aux6.add(4);
-                    aux6.add((anchopatron/8)+(anchopatron / 4) + margenx + 6);
+                    aux6.add((anchopatron / 8) + (anchopatron / 4) + margenx + 6);
                     aux6.add(margeny);
                     aux6.add(5);
                     aux6.add(alto);
                     Vector<Integer> aux7 = new Vector<Integer>();
                     aux7.add(4);
-                    aux7.add((anchopatron/8)+(anchopatron / 2) + margenx + 6 );
+                    aux7.add((anchopatron / 8) + (anchopatron / 2) + margenx + 6);
                     aux7.add(margeny);
                     aux7.add(5);
                     aux7.add(alto);
                     Vector<Integer> aux8 = new Vector<Integer>();
                     aux8.add(4);
-                    aux8.add((anchopatron/8)+ (anchopatron / 2) + (anchopatron / 4)  + margenx + 13 );
+                    aux8.add((anchopatron / 8) + (anchopatron / 2) + (anchopatron / 4) + margenx + 13);
                     aux8.add(margeny);
                     aux8.add(5);
                     aux8.add(alto);
