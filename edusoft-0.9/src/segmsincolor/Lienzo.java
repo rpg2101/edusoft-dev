@@ -13,17 +13,11 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.awt.RenderingHints;
-import java.awt.TextField;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.RenderingHints;;
 import java.awt.event.MouseEvent;
 import java.util.Iterator;
 import java.util.Vector;
-import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.event.MouseInputListener;
 import segmSC.piezas.*;
 
@@ -157,6 +151,7 @@ public class Lienzo extends Canvas implements MouseInputListener {
                 break;
             } else {
                 this.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                break;
             }
         }
     }
@@ -185,6 +180,7 @@ public class Lienzo extends Canvas implements MouseInputListener {
          * Aqui inspeccionamos todas las piezas en la mesa buscando la que
          * tenga el area que coincida con el x e y del mouse.
          */
+        VentanaAnuncio anuncio = new VentanaAnuncio();
         Vector<Pieza> alineados = new Vector();
         Iterator mesaitr = mesa.iterator();
         while (mesaitr.hasNext()) {
@@ -203,23 +199,22 @@ public class Lienzo extends Canvas implements MouseInputListener {
         try {
             //Verifico que forme un entero y anuncio el resultado
             String enteroschk = chkEnteros();
-            if (enteroschk.equals("Medio") || enteroschk.equals("Cuarto") || enteroschk.equals("Octavo")) {
-                if (enteroschk.equals("Medio")) {
+            if (enteroschk.equals("Doceavo") || enteroschk.equals("Cuarto") || enteroschk.equals("Octavo")) {
+                if (enteroschk.equals("Doceavo")) {
                     //Llama a la ventana de pregunta
-                    pregunta(enteroschk);
                     trofeos.add(new Trofeo(30, this.getHeight() - 170, 150, "trofeo_medio.png"));
                     premios[0] = true;
                 } else if (enteroschk.equals("Cuarto")) {
+                    anuncio.pregunta(this);
                     trofeos.add(new Trofeo(200, this.getHeight() - 170, 150, "trofeo_cuarto.png"));
                     premios[1] = true;
                 } else if (enteroschk.equals("Octavo")) {
                     trofeos.add(new Trofeo(370, this.getHeight() - 170, 150, "trofeo_octavo.png"));
                     premios[2] = true;
                 }
-                //
-                //ventanaEntero("¡Muy Bien! ¡Asi se hace!");
+                //anuncio.anuncioEntero("¡Muy Bien! ¡Asi se hace!", this);
             } else if (enteroschk.equals("distintoColor")) {
-                ventanaEntero("Prueba de nuevo");
+                anuncio.anuncioEntero("Prueba de nuevo", this);
             }
 
         } catch (Exception e) {
@@ -234,9 +229,9 @@ public class Lienzo extends Canvas implements MouseInputListener {
 
         int ainicial = 90;
         //Medios
-        for (int i = 0; i < 2; i++) {
-            mesa.add(new Medio(x_pos, y_pos, ainicial, this));
-            ainicial = ainicial + 180;
+        for (int i = 0; i < 12; i++) {
+            mesa.add(new Doceavo(x_pos, y_pos, ainicial, this));
+            ainicial = ainicial + 30;
         }
         //Cuartos
         ainicial = 90;
@@ -256,12 +251,17 @@ public class Lienzo extends Canvas implements MouseInputListener {
         // Asigno las piezas patron
         mesa.get(0).setPatron(true);
         mesa.get(1).setPatron(true);
+        mesa.get(2).setPatron(true);
         mesa.get(3).setPatron(true);
         mesa.get(4).setPatron(true);
-        mesa.get(7).setPatron(true);
-        mesa.get(8).setPatron(true);
-        mesa.get(9).setPatron(true);
-        mesa.get(10).setPatron(true);
+        mesa.get(5).setPatron(true);
+        mesa.get(6).setPatron(true);
+        mesa.get(13).setPatron(true);
+        mesa.get(14).setPatron(true);
+        mesa.get(17).setPatron(true);
+        mesa.get(18).setPatron(true);
+        mesa.get(19).setPatron(true);
+        mesa.get(20).setPatron(true);
     }
 
     public void resetPiezas() {
@@ -274,7 +274,7 @@ public class Lienzo extends Canvas implements MouseInputListener {
 
     // Area de accion del click del mouse
     private Rectangle areaMouse(MouseEvent me) {
-        return new Rectangle(me.getX() - 10, me.getY() - 10, 20, 20);
+        return new Rectangle(me.getX() - 2, me.getY() - 2, 4, 4);
     }
 
     private void alinearPatron(Pieza p) {
@@ -331,79 +331,15 @@ public class Lienzo extends Canvas implements MouseInputListener {
         return tmp;
     }
 
-    private void ventanaEntero(String mensaje) {
-        final JFrame f = new JFrame("Fracciones");
-        f.setBounds(getWidth() / 2 - 100, getHeight() / 2 - 100, 270, 100);
-        f.setResizable(false);
-        JPanel p = new JPanel();
-        p.setLayout(null);
-        JLabel l = new JLabel();
-        l.setBounds(25, 3, 230, 50);
-        if (premios[0] && premios[1] && premios[2]) {
-            mensaje = "¡Muy bien!¡Armaste 3 Enteros!";
-        }
-        l.setText(mensaje);
-        JButton b = new JButton("Continuar");
-        b.setBounds(55, 45, 150, 25);
-        b.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent ae) {
-                resetPiezas();
-                f.dispose();
-                if (premios[0] && premios[1] && premios[2]) {
-
-                    frame.dispose();
-                }
-            }
-        });
-        p.add(b);
-        p.add(l);
-        f.add(p);
-        f.setVisible(true);
-    }
-
-    private void pregunta(String tipo) {
-        final JFrame f = new JFrame("Fracciones");
-        f.setBounds(getWidth() / 2 - 100, getHeight() / 2 - 100, 270, 160);
-        f.setResizable(false);
-        JPanel p = new JPanel();
-        p.setLayout(null);
-        String str = "<html>" + "Cuantas piezas de mismo color" + "<br>"
-                + "necesitaste para armar un entero:" + "</html>";
-        JLabel mensaje = new JLabel(str);
-        mensaje.setBounds(27, 3, 230, 50);
-        final TextField npiezas = new TextField();
-        npiezas.setBounds(40, 50, 20, 20);
-        JLabel ld = new JLabel(" de  __");
-        ld.setBounds(65, 43, 50, 40);
-        TextField numerador = new TextField();
-        numerador.setBounds(90, 45, 20, 20);
-        TextField denominador = new TextField();
-        denominador.setBounds(90, 75, 20, 20);
-        JButton b = new JButton("Comprobar");
-        b.setBounds(55, f.getHeight() - 60, 150, 25);
-        b.addActionListener(new ActionListener() {
-
-            public void actionPerformed(ActionEvent ae) {
-                resetPiezas();
-                f.dispose();
-            }
-        });
-        p.add(b);
-        p.add(mensaje);
-        p.add(ld);
-        p.add(npiezas);
-        p.add(numerador);
-        p.add(denominador);
-        f.add(p);
-        f.setVisible(true);
-    }
-
     private Graphics getGB() {
         return gBuffer;
     }
 
     private void setGB(Graphics graphics) {
         gBuffer = graphics;
+    }
+
+    public boolean getPremio(int i) {
+        return premios[i];
     }
 }
