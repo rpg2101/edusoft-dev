@@ -14,8 +14,6 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.util.Vector;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -330,9 +328,11 @@ public class Lienzo extends Canvas {
                 getGB().drawString(" Despliega el rectángulo ", 50, 420);
             }
             if (comoson) {
+
                 getGB().setFont(new Font("Serif", Font.BOLD, 30));
                 getGB().drawString("¿ Como son las partes ? ", 50, 420);
                 getGB().setFont(new Font("Serif", Font.BOLD, 50));
+                getGB().drawString("_______________", 180, 500);
 
                 if (letrai) {
                     getGB().drawString("I", 180, 500);
@@ -392,8 +392,6 @@ public class Lienzo extends Canvas {
                         modificaranchod = false;
                         desplegar = false;
                         comoson = true;
-                        letrai = true;
-                        letras = true;
                         filos = 0;
                         this.rectangulo.width = anchopatron;
                         x = margenx + ancho;
@@ -442,8 +440,6 @@ public class Lienzo extends Canvas {
                     modificaranchod = false;
                     desplegar = false;
                     comoson = true;
-                    letrai = true;
-                    letras = true;
                     filos = 0;
                     this.rectangulo.width = anchopatron;
                     x = margenx + ancho;
@@ -516,8 +512,6 @@ public class Lienzo extends Canvas {
                     modificaranchod = false;
                     desplegar = false;
                     comoson = true;
-                    letrai = true;
-                    letras = true;
                     this.rectangulo.width = ancho;
                     x = margenx + ancho;
                     this.getElem().elementAt(2).set(3, 0);
