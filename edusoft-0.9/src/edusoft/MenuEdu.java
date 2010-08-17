@@ -15,6 +15,7 @@ import java.awt.event.WindowEvent;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import segmcolor.SegMain;
 import segmsincolor.SegSC;
 
 /**
@@ -52,7 +53,7 @@ class MenuEdu {
         });
         b3.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                MenuEdu m = new MenuEdu();
+                SegMain m = new SegMain();
             }
         });
         b4.addActionListener(new ActionListener() {
