@@ -15,6 +15,8 @@ import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -80,47 +82,7 @@ public class Lienzo extends Canvas {
             }
         }
         if (letrai && letrag && letrau && letraa && letral && letrae && letras) {
-            final JDialog f = new JDialog();
-            f.setBounds(100, 0, 600, 600);
-            f.setVisible(true);
-            f.setAlwaysOnTop(true);
-            f.setLayout(null);
-
-            JLabel l1 = new JLabel("Cada parte recibe el nombre de \"medio\" ");
-            l1.setFont(new Font("Serif", Font.BOLD, 20));
-
-            JLabel l2 = new JLabel("Cada medio se representa numericamente");
-            l2.setFont(new Font("Serif", Font.BOLD, 20));
-
-            JLabel lnum = new JLabel("1    numerador ");
-            lnum.setFont(new Font("Serif", Font.BOLD, 40));
-
-            JLabel lden = new JLabel("2    denominador ");
-            lden.setFont(new Font("Serif", Font.BOLD, 40));
-
-
-            l1.setBounds(50, 20, 500, 50);
-            l2.setBounds(50, 200, 500, 20);
-            lnum.setBounds(90, 250, 500, 60);
-            lden.setBounds(90, 300, 500, 60);
-
-            JButton b = new JButton("Continuar");
-            b.addActionListener(new ActionListener() {
-
-                public void actionPerformed(ActionEvent e) {
-
-                    f.setVisible(false);
-                    getLienzo().armarRect(elemento, 1);
-                    fraccion++;
-                    repaint();
-                }
-            });
-            b.setBounds(f.getWidth() / 2 - 100, f.getHeight() - 120, 165, 50);
-            f.add(b);
-            f.add(l1);
-            f.add(l2);
-            f.add(lnum);
-            f.add(lden);
+            ventanaInst();
             this.comoson = false;
             this.letrai = false;
             this.letrag = false;
@@ -579,6 +541,68 @@ public class Lienzo extends Canvas {
         }
 
         return false;
+    }
+
+    private void ventanaInst() {
+        final JDialog f = new JDialog();
+        f.setBounds(100, 0, 600, 600);
+        f.setVisible(true);
+        f.setAlwaysOnTop(true);
+        f.setLayout(null);
+        final Image medios = new ImageIcon(getClass().getResource("medios.png")).getImage();
+        final Image medios1 = new ImageIcon(getClass().getResource("medios1.png")).getImage();
+
+        Canvas minilienzo = new Canvas() {
+
+            @Override
+            public void paint(Graphics g) {
+                g.drawImage(medios, 90, 0, 400 , 170, this);
+            }
+
+            ;
+        };
+        minilienzo.setBounds(0, 60, 600, 170);
+        Canvas minilienzo2 = new Canvas() {
+
+            @Override
+            public void paint(Graphics g) {
+                g.drawImage(medios1, 90, 0, 400 , 150, this);
+            }
+
+            ;
+        };
+        minilienzo2.setBounds(0, 360, 600, 150);
+        JLabel l1 = new JLabel("Cada parte recibe el nombre de \"medio\" ");
+        l1.setFont(new Font("Serif", Font.BOLD, 20));
+        JLabel l2 = new JLabel("Cada medio se representa numericamente");
+        l2.setFont(new Font("Serif", Font.BOLD, 20));
+        JLabel lnum = new JLabel("1    numerador ");
+        lnum.setFont(new Font("Serif", Font.BOLD, 40));
+        JLabel lden = new JLabel("2    denominador ");
+        lden.setFont(new Font("Serif", Font.BOLD, 40));
+        l1.setBounds(50, 20, 500, 50);
+        l2.setBounds(50, 230, 500, 20);
+        lnum.setBounds(90, 250, 500, 60);
+        lden.setBounds(90, 300, 500, 60);
+        JButton b = new JButton("Continuar");
+        b.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent e) {
+
+                f.setVisible(false);
+                getLienzo().armarRect(elemento, 1);
+                fraccion++;
+                repaint();
+            }
+        });
+        b.setBounds(f.getWidth() / 2 - 100, f.getHeight() - 90, 165, 50);
+        f.add(minilienzo);
+        f.add(minilienzo2);
+        f.add(b);
+        f.add(l1);
+        f.add(l2);
+        f.add(lnum);
+        f.add(lden);
     }
 }
 
