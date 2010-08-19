@@ -14,11 +14,18 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.awt.RenderingHints;;
+import java.awt.RenderingHints;
+
+;
+
 import java.awt.event.MouseEvent;
+
 import java.util.Iterator;
+
 import java.util.Vector;
+
 import javax.swing.JFrame;
+
 import javax.swing.event.MouseInputListener;
 
 /**
@@ -34,6 +41,7 @@ public class Lienzo extends Canvas implements MouseInputListener {
     private Image imag;
     private Graphics gBuffer;
     private JFrame frame;
+    private WinPregunta winpregunta;
 
     public Lienzo() {
         // Defino dimiensiones y color de fondo
@@ -205,14 +213,14 @@ public class Lienzo extends Canvas implements MouseInputListener {
                     trofeos.add(new Trofeo(30, this.getHeight() - 170, 150, "trofeo_medio.png"));
                     premios[0] = true;
                 } else if (enteroschk.equals("Cuarto")) {
-                    anuncio.pregunta(this);
+                    System.out.println("Hola linezo "+this);
+                    winpregunta = new WinPregunta(this);
                     trofeos.add(new Trofeo(200, this.getHeight() - 170, 150, "trofeo_cuarto.png"));
                     premios[1] = true;
                 } else if (enteroschk.equals("Octavo")) {
                     trofeos.add(new Trofeo(370, this.getHeight() - 170, 150, "trofeo_octavo.png"));
                     premios[2] = true;
                 }
-                //anuncio.anuncioEntero("¡Muy Bien! ¡Asi se hace!", this);
             } else if (enteroschk.equals("distintoColor")) {
                 anuncio.anuncioEntero("Prueba de nuevo", this);
             }
@@ -341,5 +349,50 @@ public class Lienzo extends Canvas implements MouseInputListener {
 
     public boolean getPremio(int i) {
         return premios[i];
+    }
+
+    public void comprobar(int nmedio, int ntercio, int ncuarto, int nsexto,
+            int noctavo, int ndoceavo) {
+        int[] tipos = null;
+        for (int i = 0; i < 6; i++) {
+            tipos[i] = 0;
+        }
+        tipos[0]++;
+        int[] atipos = {nmedio,ntercio,ncuarto,nsexto,noctavo,ndoceavo};
+        Iterator it = mesa.iterator();
+        Pieza patron = mesa.firstElement();
+
+        while (it.hasNext()) {
+            Pieza p = (Pieza) it.next();
+            //Seleccione solo las piezas alineadas a la pieza patron
+            if (p.getX() == patron.getX() && p.getY() == patron.getY()) {
+                // Chequeo que la pieza
+                if (p.getClass().getSimpleName().equals("Medio")) {
+                    tipos[0]++;
+                }
+                if (p.getClass().getSimpleName().equals("Tercio")) {
+                    tipos[1]++;
+                }
+                if (p.getClass().getSimpleName().equals("Cuarto")) {
+                    tipos[2]++;
+                }
+                if (p.getClass().getSimpleName().equals("Sexto")) {
+                    tipos[3]++;
+                }
+                if (p.getClass().getSimpleName().equals("Octavo")) {
+                    tipos[4]++;
+                }
+                if (p.getClass().getSimpleName().equals("Doceavo")) {
+                    tipos[5]++;
+                }
+                patron = p;
+            }
+            if (tipos != atipos){
+                new VentanaAnuncio().anuncioEntero("Prueba de nuevo", this);
+                winpregunta.dispose();
+            }
+        }
+
+
     }
 }
