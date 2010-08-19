@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package segmC.piezas;
+package segmcolor.piezas;
 
 import java.awt.Color;
 import java.awt.Rectangle;
@@ -27,11 +27,11 @@ public class Medio extends Pieza {
         int tam_H = getTamelipse() / 2;
         switch (this.getAnginicial()) {
             case 90:
-                tmp = new Rectangle(getX() + 10, getY() + 50, tam_W - 15,
+                tmp = new Rectangle(getX() + 10, getY() + 37, tam_W - 15,
                         tam_H);
                 break;
             case 270:
-                tmp = new Rectangle(getX() + tam_W + 5, getY() + 50, tam_W - 15,
+                tmp = new Rectangle(getX() + 80, getY() + 37, tam_W - 15,
                         tam_H);
                 break;
         }

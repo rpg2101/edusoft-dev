@@ -5,7 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.Iterator;
 import java.util.Vector;
-import segmC.piezas.Pieza;
+import segmcolor.piezas.Pieza;
 
 /**
  *

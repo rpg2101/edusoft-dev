@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package segmC.piezas;
+package segmcolor.piezas;
 
 import java.awt.Color;
 import java.awt.Rectangle;

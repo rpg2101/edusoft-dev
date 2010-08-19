@@ -2,12 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package segmSC.piezas;
+package segmcolor.piezas;
 
 import java.awt.Color;
 import java.awt.Rectangle;
+import segmcolor.Lienzo;
 
-import equivalencia.Lienzo;
 
 /**
  *
@@ -15,7 +15,7 @@ import equivalencia.Lienzo;
  */
 public class Cuarto extends Pieza {
 
-    public Cuarto(int x0, int y0, int ainicial, segmsincolor.Lienzo l) {
+    public Cuarto(int x0, int y0, int ainicial, Lienzo l) {
         super(x0, y0, ainicial, l);
         setColor(Color.RED);
         setAngfinal(90);

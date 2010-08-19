@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package segmC.piezas;
+package segmsincolor.piezas;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -11,7 +11,6 @@ import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Arc2D;
-import segmcolor.Lienzo;
 
 /**
  *
@@ -23,10 +22,10 @@ public abstract class Pieza {
     final private int tamelipse;
     private int anginicial, angfinal;
     private Color color;
-    private Lienzo lienzo;
+    private segmsincolor.Lienzo lienzo;
     private boolean pressOut, isPatron;
 
-    public Pieza(int x0, int y0, int aini, Lienzo l) {
+    public Pieza(int x0, int y0, int aini, segmsincolor.Lienzo l) {
         pressOut = true;
         isPatron = false;
         x = x_ini = x0;
@@ -50,7 +49,6 @@ public abstract class Pieza {
                 RenderingHints.VALUE_ANTIALIAS_ON));
         g2.draw(new Arc2D.Float(x, y, tamelipse, tamelipse, anginicial,
                 angfinal, Arc2D.PIE));
-        //g2.draw(segArrastre());
     }
 
     /**

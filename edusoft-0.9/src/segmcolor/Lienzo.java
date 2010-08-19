@@ -5,7 +5,7 @@
 package segmcolor;
 
 
-import segmC.piezas.*;
+import segmcolor.piezas.*;
 import java.awt.BasicStroke;
 import java.awt.Canvas;
 import java.awt.Color;
@@ -23,6 +23,7 @@ import java.util.Random;
 import java.util.Vector;
 import javax.swing.JFrame;
 import javax.swing.event.MouseInputListener;
+
 
 
 /**

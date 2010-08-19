@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package segmSC.piezas;
+package segmcolor.piezas;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -22,10 +22,10 @@ public abstract class Pieza {
     final private int tamelipse;
     private int anginicial, angfinal;
     private Color color;
-    private segmsincolor.Lienzo lienzo;
+    private segmcolor.Lienzo lienzo;
     private boolean pressOut, isPatron;
 
-    public Pieza(int x0, int y0, int aini, segmsincolor.Lienzo l) {
+    public Pieza(int x0, int y0, int aini, segmcolor.Lienzo l) {
         pressOut = true;
         isPatron = false;
         x = x_ini = x0;
