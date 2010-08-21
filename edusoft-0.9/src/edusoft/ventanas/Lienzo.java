@@ -556,7 +556,7 @@ public class Lienzo extends Canvas {
         f.setVisible(true);
         f.setAlwaysOnTop(true);
         f.setLayout(null);
-
+        f.setResizable(false);
         String nombre = "";
         String den = "";
 

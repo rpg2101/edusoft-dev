@@ -35,6 +35,7 @@ public class Intro {
 
             public void actionPerformed(ActionEvent e) {
                 MenuEdu m = new MenuEdu();
+                frame.dispose();
             }
         });
         panel.add(sig);
