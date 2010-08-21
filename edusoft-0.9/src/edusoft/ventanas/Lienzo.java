@@ -15,11 +15,10 @@ import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 /**
@@ -29,7 +28,7 @@ import javax.swing.JLabel;
 public class Lienzo extends Canvas {
 
     private Vector<Vector> elemento;
-    private Image pliegue, solapa, basepapel0, linea;
+    private Image pliegue, solapa, basepapel0, linea, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6;
     private boolean modificaranchod, modificaraltoup, modificaranchoi, modificaraltodown;
     private boolean outi, outup, outdown, outd, desplegar, comoson;
     private boolean letrai, letrag, letrau, letraa, letral, letrae, letras;
@@ -44,6 +43,7 @@ public class Lienzo extends Canvas {
     private int filos = 7;
     private int ndoblez;
     private int fraccion;
+    private final JFrame frame;
 
     public Lienzo getLienzo() {
         return this;
@@ -82,7 +82,7 @@ public class Lienzo extends Canvas {
             }
         }
         if (letrai && letrag && letrau && letraa && letral && letrae && letras) {
-            ventanaInst();
+            ventanaInst(this);
             this.comoson = false;
             this.letrai = false;
             this.letrag = false;
@@ -188,8 +188,15 @@ public class Lienzo extends Canvas {
         elemento.add(rectdoblez2);
     }
 
-    public Lienzo() {
+    Lienzo(JFrame frame) {
         setBackground(Color.BLACK);
+        this.frame = frame;
+        tmp1 = new ImageIcon(getClass().getResource("medios.png")).getImage();
+        tmp2 = new ImageIcon(getClass().getResource("medios1.png")).getImage();
+        tmp3 = new ImageIcon(getClass().getResource("cuartos.png")).getImage();
+        tmp4 = new ImageIcon(getClass().getResource("cuartos1.png")).getImage();
+        tmp5 = new ImageIcon(getClass().getResource("octavos.png")).getImage();
+        tmp6 = new ImageIcon(getClass().getResource("octavos1.png")).getImage();
         basepapel0 = new ImageIcon(getClass().getResource("basepapel0.png")).getImage();
         solapa = new ImageIcon(getClass().getResource("solapa.png")).getImage();
         pliegue = new ImageIcon(getClass().getResource("pliegue.png")).getImage();
@@ -543,20 +550,48 @@ public class Lienzo extends Canvas {
         return false;
     }
 
-    private void ventanaInst() {
+    private void ventanaInst(final Lienzo l) {
         final JDialog f = new JDialog();
         f.setBounds(100, 0, 600, 600);
         f.setVisible(true);
         f.setAlwaysOnTop(true);
         f.setLayout(null);
-        final Image medios = new ImageIcon(getClass().getResource("medios.png")).getImage();
-        final Image medios1 = new ImageIcon(getClass().getResource("medios1.png")).getImage();
+
+        String nombre = "";
+        String den = "";
+
+        if (fraccion == 0) {
+            nombre = "medio";
+            den = "2";
+
+
+        }
+        if (fraccion == 1) {
+            nombre = "cuarto";
+            den = "4";
+
+
+        }
+        if (fraccion == 2) {
+            nombre = "octavo";
+            den = "8";
+        }
+
 
         Canvas minilienzo = new Canvas() {
 
             @Override
             public void paint(Graphics g) {
-                g.drawImage(medios, 90, 0, 400 , 170, this);
+                if (fraccion == 0) {
+                    g.drawImage(tmp1, 90, 0, 400, 170, this);
+                }
+                if (fraccion == 1) {
+                    g.drawImage(tmp3, 90, 0, 400, 170, this);
+                }
+                if (fraccion == 2) {
+                    g.drawImage(tmp5, 90, 0, 400, 170, this);
+                }
+
             }
 
             ;
@@ -566,33 +601,47 @@ public class Lienzo extends Canvas {
 
             @Override
             public void paint(Graphics g) {
-                g.drawImage(medios1, 90, 0, 400 , 150, this);
+                if (fraccion == 0) {
+                    g.drawImage(tmp2, 90, 0, 400, 140, this);
+                }
+                if (fraccion == 1) {
+                    g.drawImage(tmp4, 90, 0, 400, 140, this);
+                }
+                if (fraccion == 2) {
+                    g.drawImage(tmp6, 90, 0, 400, 140, this);
+                }
+
             }
 
             ;
         };
-        minilienzo2.setBounds(0, 360, 600, 150);
-        JLabel l1 = new JLabel("Cada parte recibe el nombre de \"medio\" ");
+        minilienzo2.setBounds(0, 360, 600, 140);
+        JLabel l1 = new JLabel("Cada parte recibe el nombre de \"" + nombre + "\" ");
         l1.setFont(new Font("Serif", Font.BOLD, 20));
-        JLabel l2 = new JLabel("Cada medio se representa numericamente");
+        JLabel l2 = new JLabel("Cada " + nombre + " se representa numericamente");
         l2.setFont(new Font("Serif", Font.BOLD, 20));
         JLabel lnum = new JLabel("1    numerador ");
         lnum.setFont(new Font("Serif", Font.BOLD, 40));
-        JLabel lden = new JLabel("2    denominador ");
+        JLabel lden = new JLabel(den + "    denominador ");
         lden.setFont(new Font("Serif", Font.BOLD, 40));
+        JLabel raya = new JLabel("_");
+        raya.setFont(new Font("Serif", Font.BOLD, 60));
         l1.setBounds(50, 20, 500, 50);
         l2.setBounds(50, 230, 500, 20);
         lnum.setBounds(90, 250, 500, 60);
         lden.setBounds(90, 300, 500, 60);
+        raya.setBounds(90, 220, 100, 100);
         JButton b = new JButton("Continuar");
         b.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-
-                f.setVisible(false);
+                if (fraccion == 2) {
+                    l.frame.dispose();
+                }
                 getLienzo().armarRect(elemento, 1);
                 fraccion++;
                 repaint();
+                f.dispose();
             }
         });
         b.setBounds(f.getWidth() / 2 - 100, f.getHeight() - 90, 165, 50);
@@ -603,6 +652,7 @@ public class Lienzo extends Canvas {
         f.add(l2);
         f.add(lnum);
         f.add(lden);
+        f.add(raya);
     }
 }
 

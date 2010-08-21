@@ -25,7 +25,7 @@ public class Fracc1 {
         frame.setLayout(null);
         frame.setBounds(0, 0, 800, 600);
         frame.setResizable(false);
-        Lienzo panel = new Lienzo();
+        Lienzo panel = new Lienzo(frame);
         frame.setLayout(null);
         panel.setBounds(20, 20, frame.getWidth()-50, frame.getHeight()-70);
         JButton sig = new JButton ("Salir");
