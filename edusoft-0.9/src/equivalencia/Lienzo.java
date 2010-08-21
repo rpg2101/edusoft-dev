@@ -54,7 +54,7 @@ public class Lienzo extends Canvas implements MouseInputListener {
         frame = new JFrame();
         frame.setBounds(0, 0, 800, 600);
         frame.setResizable(false);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setTitle("Fracciones");
         comprobar = new JButton("Comprobar");
         comprobar.addActionListener(new ActionListener() {
