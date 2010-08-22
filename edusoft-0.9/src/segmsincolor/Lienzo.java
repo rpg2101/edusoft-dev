@@ -18,13 +18,9 @@ import java.awt.RenderingHints;
 
 
 import java.awt.event.MouseEvent;
-
 import java.util.Iterator;
-
 import java.util.Vector;
-
 import javax.swing.JFrame;
-
 import javax.swing.event.MouseInputListener;
 
 /**
