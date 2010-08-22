@@ -213,10 +213,11 @@ public class Lienzo extends Canvas implements MouseInputListener {
                     trofeos.add(new Trofeo(30, this.getHeight() - 170, 150, "trofeo_medio.png"));
                     premios[0] = true;
                 } else if (enteroschk.equals("Cuarto")) {
-                    System.out.println("Hola linezo "+this);
+                    //Llama a la pregunta
                     winpregunta = new WinPregunta(this);
-                    trofeos.add(new Trofeo(200, this.getHeight() - 170, 150, "trofeo_cuarto.png"));
-                    premios[1] = true;
+                    if (premios[1] == true) {
+                        trofeos.add(new Trofeo(200, this.getHeight() - 170, 150, "trofeo_cuarto.png"));
+                    }
                 } else if (enteroschk.equals("Octavo")) {
                     trofeos.add(new Trofeo(370, this.getHeight() - 170, 150, "trofeo_octavo.png"));
                     premios[2] = true;
@@ -353,12 +354,8 @@ public class Lienzo extends Canvas implements MouseInputListener {
 
     public void comprobar(int nmedio, int ntercio, int ncuarto, int nsexto,
             int noctavo, int ndoceavo) {
-        int[] tipos = null;
-        for (int i = 0; i < 6; i++) {
-            tipos[i] = 0;
-        }
-        tipos[0]++;
-        int[] atipos = {nmedio,ntercio,ncuarto,nsexto,noctavo,ndoceavo};
+        int[] tipos = {0, 0, 0, 0, 0, 0};
+        int[] atipos = {nmedio, ntercio, ncuarto, nsexto, noctavo, ndoceavo};
         Iterator it = mesa.iterator();
         Pieza patron = mesa.firstElement();
 
@@ -387,12 +384,25 @@ public class Lienzo extends Canvas implements MouseInputListener {
                 }
                 patron = p;
             }
-            if (tipos != atipos){
-                new VentanaAnuncio().anuncioEntero("Prueba de nuevo", this);
-                winpregunta.dispose();
+
+        }
+        boolean array = false;
+        //Compruebo los resultados
+        for (int i = 0; i < tipos.length; i++) {
+            if (tipos[i] != atipos[i]) {
+                array = false;
+                break;
+            } else {
+                array = true;
             }
         }
-
+        if (array) {
+            new VentanaAnuncio().anuncioEntero("Muy bien¡!Asi se hace¡", this);
+            //Activa el premio correspondiente si no fue activado antes
+            premios[1] = true;
+        } else {
+            new VentanaAnuncio().anuncioEntero("Prueba de nuevo", this);
+        }
 
     }
 }

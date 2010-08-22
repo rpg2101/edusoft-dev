@@ -21,7 +21,6 @@ public class WinPregunta extends javax.swing.JFrame {
     /** Creates new form WinPregunta */
     public WinPregunta(Lienzo l) {
         lienzo = l;
-        System.out.println("hola "+l);
         initComponents();
         setVisible(true);
     }
@@ -191,12 +190,14 @@ public class WinPregunta extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
-        System.out.println("boton "+nmedio.getText()+ " "+lienzo);
-        
-        lienzo.comprobar(Integer.getInteger(nmedio.getText()),Integer.getInteger(ntercio.getText()),Integer.getInteger(ncuarto.getText()),
-                Integer.getInteger(nsexto.getText()),Integer.getInteger(noctavo.getText()),Integer.getInteger(ndoceavo.getText()));
-
-
+        try{
+        lienzo.comprobar(Integer.parseInt(nmedio.getText()), Integer.parseInt(ntercio.getText()),
+                Integer.parseInt(ncuarto.getText()),Integer.parseInt(nsexto.getText()),
+                Integer.parseInt(noctavo.getText()),Integer.parseInt(ndoceavo.getText()));
+        dispose();
+        }catch (Exception e){
+            
+        }
     }//GEN-LAST:event_jButton1MouseClicked
 
 
