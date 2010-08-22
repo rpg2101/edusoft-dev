@@ -303,6 +303,7 @@ public class Lienzo extends Canvas implements MouseInputListener {
         Iterator it = mesa.iterator();
         Pieza patron = mesa.firstElement();
         int sumaAngulos = patron.getAngfinal();
+
         //Remuevo la pieza patron de la lista de chequeo
         it.next();
         while (it.hasNext()) {
@@ -315,25 +316,28 @@ public class Lienzo extends Canvas implements MouseInputListener {
                 patron = p;
             }
         }
-        //Verifico que las piezas sean todas iguales
-        Color tmpColor = Color.white;
-        tmpColor = alineados.firstElement().getColor();
 
+        //Verifico que las piezas sean todas iguales
         Iterator al = alineados.iterator();
+        patron = mesa.firstElement();
         while (al.hasNext()) {
             Pieza tmp = (Pieza) al.next();
-            if (tmp.getColor().equals(tmpColor)) {
+            if (tmp.ckInnerAng(patron.getAngMayor())) {
                 congruentes = true;
             } else {
                 congruentes = false;
+                break;
             }
+            patron = tmp;
         }
+
         //Preparo la respuesta de la funcion
         String tmp = "nulo";
-        if (sumaAngulos == 360) {
-            if (congruentes) {
+        if (congruentes) {
+            if (sumaAngulos==360) {
                 tmp = alineados.firstElement().getClass().getSimpleName();
             } else {
+                System.out.println("Suma pero no son congruentes");
                 tmp = "distintoColor";
             }
         }

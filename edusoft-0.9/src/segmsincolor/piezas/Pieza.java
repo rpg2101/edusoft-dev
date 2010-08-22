@@ -100,8 +100,15 @@ public abstract class Pieza {
     }
 
     public boolean ckInnerAng(int ang) {
-        Integer integer = Integer.valueOf(ang);
-        return integer.equals(anginicial + angfinal);
+        if (anginicial == ang) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public int getAngMayor(){
+        return anginicial+angfinal;
     }
 
     /**
