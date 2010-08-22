@@ -16,7 +16,6 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 
-;
 
 import java.awt.event.MouseEvent;
 
@@ -41,7 +40,7 @@ public class Lienzo extends Canvas implements MouseInputListener {
     private Image imag;
     private Graphics gBuffer;
     private JFrame frame;
-    private WinPregunta winpregunta;
+    private String enteroschk;
 
     public Lienzo() {
         // Defino dimiensiones y color de fondo
@@ -104,8 +103,8 @@ public class Lienzo extends Canvas implements MouseInputListener {
         g2.setColor(Color.BLACK);
         // Titulo y Cartel de trofeos
         g2.setFont(new Font("Serif", Font.BOLD, 25));
-        g2.drawString("Completar el entero usando piezas del mismo color",
-                40, 35);
+        g2.drawString("Completar el entero usando cualquier piezas",
+                55, 35);
         g2.setFont(new Font("Serif", Font.BOLD, 20));
         g2.drawString("Combinaciones obtenidas:", 20, this.getHeight() - 210);
 
@@ -188,7 +187,6 @@ public class Lienzo extends Canvas implements MouseInputListener {
          * Aqui inspeccionamos todas las piezas en la mesa buscando la que
          * tenga el area que coincida con el x e y del mouse.
          */
-        VentanaAnuncio anuncio = new VentanaAnuncio();
         Vector<Pieza> alineados = new Vector();
         Iterator mesaitr = mesa.iterator();
         while (mesaitr.hasNext()) {
@@ -206,26 +204,10 @@ public class Lienzo extends Canvas implements MouseInputListener {
         }
         try {
             //Verifico que forme un entero y anuncio el resultado
-            String enteroschk = chkEnteros();
-            if (enteroschk.equals("Doceavo") || enteroschk.equals("Cuarto") || enteroschk.equals("Octavo")) {
-                if (enteroschk.equals("Doceavo")) {
-                    //Llama a la ventana de pregunta
-                    trofeos.add(new Trofeo(30, this.getHeight() - 170, 150, "trofeo_medio.png"));
-                    premios[0] = true;
-                } else if (enteroschk.equals("Cuarto")) {
-                    //Llama a la pregunta
-                    winpregunta = new WinPregunta(this);
-                    if (premios[1] == true) {
-                        trofeos.add(new Trofeo(200, this.getHeight() - 170, 150, "trofeo_cuarto.png"));
-                    }
-                } else if (enteroschk.equals("Octavo")) {
-                    trofeos.add(new Trofeo(370, this.getHeight() - 170, 150, "trofeo_octavo.png"));
-                    premios[2] = true;
-                }
-            } else if (enteroschk.equals("distintoColor")) {
-                anuncio.anuncioEntero("Prueba de nuevo", this);
+            enteroschk = chkEnteros();
+            if (!enteroschk.equals("nocongruentes") && !enteroschk.equals("nulo")) {
+                new WinPregunta(this);
             }
-
         } catch (Exception e) {
         }
     }
@@ -237,40 +219,29 @@ public class Lienzo extends Canvas implements MouseInputListener {
         mesa.add(new Medio(80, 100, 90, this));
 
         int ainicial = 90;
-        //Medios
-        for (int i = 0; i < 12; i++) {
-            mesa.add(new Doceavo(x_pos, y_pos, ainicial, this));
-            ainicial = ainicial + 30;
-        }
         //Cuartos
-        ainicial = 90;
-        y_pos = y_pos + 155;
         for (int i = 0; i < 4; i++) {
             mesa.add(new Cuarto(x_pos, y_pos, ainicial, this));
             ainicial = ainicial + 90;
         }
-        //Octavos
+        //Cuartos
         ainicial = 90;
         y_pos = y_pos + 155;
         for (int i = 0; i < 8; i++) {
             mesa.add(new Octavo(x_pos, y_pos, ainicial, this));
             ainicial = ainicial + 45;
         }
+        //Octavos
+        ainicial = 90;
+        y_pos = y_pos + 155;
+        for (int i = 0; i < 12; i++) {
+            mesa.add(new Doceavo(x_pos, y_pos, ainicial, this));
+            ainicial = ainicial + 30;
+        }
 
         // Asigno las piezas patron
         mesa.get(0).setPatron(true);
-        mesa.get(1).setPatron(true);
-        mesa.get(2).setPatron(true);
-        mesa.get(3).setPatron(true);
-        mesa.get(4).setPatron(true);
-        mesa.get(5).setPatron(true);
-        mesa.get(6).setPatron(true);
-        mesa.get(13).setPatron(true);
-        mesa.get(14).setPatron(true);
-        mesa.get(17).setPatron(true);
-        mesa.get(18).setPatron(true);
-        mesa.get(19).setPatron(true);
-        mesa.get(20).setPatron(true);
+        
     }
 
     public void resetPiezas() {
@@ -319,26 +290,28 @@ public class Lienzo extends Canvas implements MouseInputListener {
 
         //Verifico que las piezas sean todas iguales
         Iterator al = alineados.iterator();
-        patron = mesa.firstElement();
+        patron = alineados.firstElement();
         while (al.hasNext()) {
             Pieza tmp = (Pieza) al.next();
-            if (tmp.ckInnerAng(patron.getAngMayor())) {
+            //if (tmp.ckInnerAng(patron.getAngMayor())) {
+
+            if (patron.getAngMayor() == tmp.getAnginicial()) {
                 congruentes = true;
             } else {
                 congruentes = false;
-                break;
             }
+            //Siguente patron
             patron = tmp;
         }
 
         //Preparo la respuesta de la funcion
         String tmp = "nulo";
-        if (congruentes) {
-            if (sumaAngulos==360) {
-                tmp = alineados.firstElement().getClass().getSimpleName();
+        if (sumaAngulos == 360) {
+            if (congruentes) {
+                tmp = alineados.firstElement().getClass().getSimpleName()
+                        + alineados.lastElement().getClass().getSimpleName();
             } else {
-                System.out.println("Suma pero no son congruentes");
-                tmp = "distintoColor";
+                tmp = "nocongruentes";
             }
         }
         return tmp;
@@ -346,66 +319,104 @@ public class Lienzo extends Canvas implements MouseInputListener {
 
     private Graphics getGB() {
         return gBuffer;
+
+
     }
 
     private void setGB(Graphics graphics) {
         gBuffer = graphics;
+
+
     }
 
     public boolean getPremio(int i) {
         return premios[i];
+
+
     }
 
     public void comprobar(int nmedio, int ntercio, int ncuarto, int nsexto,
             int noctavo, int ndoceavo) {
         int[] tipos = {0, 0, 0, 0, 0, 0};
+
+
         int[] atipos = {nmedio, ntercio, ncuarto, nsexto, noctavo, ndoceavo};
         Iterator it = mesa.iterator();
         Pieza patron = mesa.firstElement();
 
+
+
         while (it.hasNext()) {
             Pieza p = (Pieza) it.next();
             //Seleccione solo las piezas alineadas a la pieza patron
+
+
             if (p.getX() == patron.getX() && p.getY() == patron.getY()) {
                 // Chequeo que la pieza
                 if (p.getClass().getSimpleName().equals("Medio")) {
                     tipos[0]++;
+
+
                 }
                 if (p.getClass().getSimpleName().equals("Tercio")) {
                     tipos[1]++;
+
+
                 }
                 if (p.getClass().getSimpleName().equals("Cuarto")) {
                     tipos[2]++;
+
+
                 }
                 if (p.getClass().getSimpleName().equals("Sexto")) {
                     tipos[3]++;
+
+
                 }
                 if (p.getClass().getSimpleName().equals("Octavo")) {
                     tipos[4]++;
+
+
                 }
                 if (p.getClass().getSimpleName().equals("Doceavo")) {
                     tipos[5]++;
+
+
                 }
                 patron = p;
+
+
             }
 
         }
         boolean array = false;
         //Compruebo los resultados
-        for (int i = 0; i < tipos.length; i++) {
+
+
+        for (int i = 0; i
+                < tipos.length; i++) {
             if (tipos[i] != atipos[i]) {
                 array = false;
+
+
                 break;
+
+
             } else {
                 array = true;
+
+
             }
         }
         if (array) {
             new VentanaAnuncio().anuncioEntero("Muy bien¡!Asi se hace¡", this);
             //Activa el premio correspondiente si no fue activado antes
-            premios[1] = true;
+            System.out.println("Combinacion " + enteroschk);
+
+
         } else {
             new VentanaAnuncio().anuncioEntero("Prueba de nuevo", this);
+
         }
 
     }
