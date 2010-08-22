@@ -99,11 +99,6 @@ public abstract class Pieza {
         angfinal = afinal;
     }
 
-    public boolean ckInnerAng(int ang) {
-        Integer integer = Integer.valueOf(ang);
-        return integer.equals(anginicial + angfinal);
-    }
-
     /**
      * @param color the color to set
      */

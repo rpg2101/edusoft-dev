@@ -297,7 +297,7 @@ public class Lienzo extends Canvas implements MouseInputListener {
 
     // Area de accion del click del mouse
     private Rectangle areaMouse(MouseEvent me) {
-        return new Rectangle(me.getX() - 10, me.getY() - 10, 20, 20);
+        return new Rectangle(me.getX() - 5, me.getY() - 5, 10, 10);
     }
 
     /** Metodo que alinea los segmentos en las distinas zonas del juego
