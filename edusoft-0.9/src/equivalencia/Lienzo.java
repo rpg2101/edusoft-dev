@@ -7,12 +7,10 @@ package equivalencia;
 import java.awt.BasicStroke;
 import java.awt.Canvas;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
@@ -27,7 +25,7 @@ import javax.swing.event.MouseInputListener;
 import equivalencia.piezas.*;
 import java.awt.Image;
 import java.awt.event.ActionListener;
-import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 /**
  *
@@ -42,7 +40,7 @@ public class Lienzo extends Canvas implements MouseInputListener {
     private Image imag;
     private Graphics gBuffer;
     private JFrame frame;
-    protected JTextArea numerador, denominador;
+    protected JTextField numerador, denominador;
     private JButton comprobar;
 
     public Lienzo() {
@@ -67,15 +65,15 @@ public class Lienzo extends Canvas implements MouseInputListener {
                     numerador.setText(null);
                     denominador.setText(null);
                     ventana("¡Muy Bien! ¡Asi se hace!");
-                } else if (check.equals("Sexto")&& (numerador.getText().equals("3")) && (denominador.getText().equals("6"))) {
+                } else if (check.equals("Sexto") && (numerador.getText().equals("3")) && (denominador.getText().equals("6"))) {
                     generarTrofeo(check);
                     premios[1] = true;
                     ventana("¡Muy Bien! ¡Asi se hace!");
-                } else if (check.equals("Octavo")&& (numerador.getText().equals("4")) && (denominador.getText().equals("8"))) {
+                } else if (check.equals("Octavo") && (numerador.getText().equals("4")) && (denominador.getText().equals("8"))) {
                     generarTrofeo(check);
                     premios[2] = true;
                     ventana("¡Muy Bien! ¡Asi se hace!");
-                } else if (check.equals("Doceavo")&& (numerador.getText().equals("6")) && (denominador.getText().equals("12"))) {
+                } else if (check.equals("Doceavo") && (numerador.getText().equals("6")) && (denominador.getText().equals("12"))) {
                     generarTrofeo(check);
                     premios[3] = true;
                     ventana("¡Muy Bien! ¡Asi se hace!");
@@ -89,14 +87,17 @@ public class Lienzo extends Canvas implements MouseInputListener {
             }
         });
         comprobar.setBounds(320, 110, 150, 30);
-        numerador = new JTextArea();
-        denominador = new JTextArea();
+        numerador = new JTextField();
+        denominador = new JTextField();
+        numerador.setHorizontalAlignment(JTextField.CENTER);
+        denominador.setHorizontalAlignment(JTextField.CENTER);
         numerador.setFont(new Font("Serif", Font.BOLD, 50));
         denominador.setFont(new Font("Serif", Font.BOLD, 50));
         numerador.setBackground(Color.LIGHT_GRAY);
         denominador.setBackground(Color.LIGHT_GRAY);
         numerador.setBounds(680, 70, 70, 50);
         denominador.setBounds(680, 140, 70, 50);
+
         // Defino dimiensiones y color de fondo
         this.setBounds(0, 0, 800, 600);
         this.setBackground(Color.WHITE);
@@ -154,7 +155,7 @@ public class Lienzo extends Canvas implements MouseInputListener {
 
         // Titulo y Cartel de trofeos
         g2.setFont(new Font("Serif", Font.BOLD, 21));
-        g2.drawString("¿Cuantas piezas de un color necesito para formar otro medio?",
+        g2.drawString("Formar otro medio con piezas del mismo color",
                 25, 35);
         // Fraccion fija
         g2.setFont(new Font("Serif", Font.BOLD, 50));
@@ -301,9 +302,6 @@ public class Lienzo extends Canvas implements MouseInputListener {
         p.setLayout(null);
         JLabel l = new JLabel();
         l.setBounds(25, 3, 230, 50);
-        if (premios[0] && premios[1] && premios[2]) {
-            mensaje = "¡Muy bien!¡Armaste 3 Enteros!";
-        }
         l.setText(mensaje);
         JButton b = new JButton("Continuar");
         b.setBounds(55, 45, 150, 25);
@@ -409,10 +407,11 @@ public class Lienzo extends Canvas implements MouseInputListener {
 
     private String chk() {
         boolean congruentes = false;
+        String respuesta = "";
+
         Vector<Pieza> alineados = new Vector();
         //Sumo los angulos de las piezas
         Iterator it = mesa.iterator();
-        Pieza patron = mesa.firstElement();
         int sumaAngulos = 0;
         //Remuevo la pieza patron de la lista de chequeo
         it.next();
@@ -420,13 +419,10 @@ public class Lienzo extends Canvas implements MouseInputListener {
             Pieza p = (Pieza) it.next();
             //Seleccione solo las piezas alineadas a la pieza patron
             if (p.getX() == 495) {
-                // Chequeo que la pieza
-                if (patron.ckInnerAng(p.getAnginicial())) {
-                    sumaAngulos = sumaAngulos + p.getAngfinal();
-                    alineados.add(p);
-                    patron = p;
-                }
+                sumaAngulos = sumaAngulos + p.getAngfinal();
+                alineados.add(p);
             }
+
         }
         System.out.println(sumaAngulos);
         //Verifico que las piezas sean todas iguales
@@ -442,15 +438,15 @@ public class Lienzo extends Canvas implements MouseInputListener {
                 congruentes = true;
             } else {
                 congruentes = false;
+                respuesta = "distintoColor";
             }
         }
 
         //Preparo la respuesta de la funcion
-        String tmp = null;
         if (sumaAngulos == 180 && congruentes) {
-            tmp = alineados.firstElement().getClass().getSimpleName();
+            respuesta = alineados.firstElement().getClass().getSimpleName();
         }
-        System.out.println(tmp);
-        return tmp;
+        System.out.println(respuesta);
+        return respuesta;
     }
 }
