@@ -310,7 +310,8 @@ public class Lienzo extends Canvas implements MouseInputListener {
             public void actionPerformed(ActionEvent ae) {
                 resetPiezas();
                 f.dispose();
-
+                numerador.setText("");
+                denominador.setText("");
             }
         });
         p.add(b);
