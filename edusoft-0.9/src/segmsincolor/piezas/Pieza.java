@@ -99,14 +99,6 @@ public abstract class Pieza {
         angfinal = afinal;
     }
 
-    public boolean ckInnerAng(int ang) {
-        if (anginicial == ang) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     public int getAngMayor(){
         return anginicial+angfinal;
     }

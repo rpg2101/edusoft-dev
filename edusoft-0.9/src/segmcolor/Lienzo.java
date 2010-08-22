@@ -311,14 +311,6 @@ public class Lienzo extends Canvas implements MouseInputListener {
         repaint();
     }
 
-    private void resetPiezas() {
-//        Iterator it = mesa.iterator();
-//        while (it.hasNext()) {
-//            ((Pieza) it.next()).resetPosicion();
-//        }
-//        repaint();
-    }
-
     private Graphics getGB() {
         return gBuffer;
     }
