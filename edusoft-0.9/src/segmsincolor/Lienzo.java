@@ -4,6 +4,8 @@
  */
 package segmsincolor;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import segmsincolor.piezas.*;
 import java.awt.BasicStroke;
 import java.awt.Canvas;
@@ -58,10 +60,14 @@ public class Lienzo extends Canvas implements MouseInputListener {
         mesa = new Vector();
         trofeos = new Vector();
         sobrePieza = false;
-        premios = new boolean[3];
+        premios = new boolean[6];
         premios[0] = false;
         premios[1] = false;
         premios[2] = false;
+        premios[3] = false;
+        premios[4] = false;
+        premios[5] = false;
+
 
         //Genero las Piezas
         generarPiezas();
@@ -237,7 +243,7 @@ public class Lienzo extends Canvas implements MouseInputListener {
 
         // Asigno las piezas patron
         mesa.get(0).setPatron(true);
-        
+
     }
 
     public void resetPiezas() {
@@ -321,99 +327,119 @@ public class Lienzo extends Canvas implements MouseInputListener {
 
     private void setGB(Graphics graphics) {
         gBuffer = graphics;
-
-
     }
 
-    public boolean getPremio(int i) {
-        return premios[i];
+    public void CuartoCuarto() {
+        this.trofeos.add(new Trofeo(20, 390, 100, "trofeo_cuarto.png"));
+        this.getPremios()[0] = true;
+    }
 
+    public void OctavoOctavo() {
+        this.trofeos.add(new Trofeo(110, 470, 100, "trofeo_octavo.png"));
+        this.getPremios()[1] = true;
+    }
 
+    public void DoceavoDoceavo() {
+        this.trofeos.add(new Trofeo(200, 390, 100, "trofeo_doceavo.png"));
+        this.getPremios()[2] = true;
+    }
+
+    public void CuartoOctavo() {
+        this.trofeos.add(new Trofeo(290, 470, 100, "trofeo_cuarto_octavo.png"));
+        this.getPremios()[3] = true;
+    }
+
+    public void OctavoCuarto() {
+        this.CuartoOctavo();
+    }
+
+    public void CuartoDoceavo() {
+        this.trofeos.add(new Trofeo(380, 390, 100, "trofeo_cuarto_doceavo.png"));
+        this.getPremios()[4] = true;
+    }
+
+    public void DoceavoCuarto() {
+        this.CuartoDoceavo();
+    }
+
+    public void OctavoDoceavo() {
+        this.trofeos.add(new Trofeo(470, 470, 100, "trofeo_octavo_doceavo.png"));
+        this.getPremios()[5] = true;
+    }
+
+    public void DoceavoOctavo() {
+        this.OctavoDoceavo();
     }
 
     public void comprobar(int nmedio, int ntercio, int ncuarto, int nsexto,
             int noctavo, int ndoceavo) {
         int[] tipos = {0, 0, 0, 0, 0, 0};
-
-
         int[] atipos = {nmedio, ntercio, ncuarto, nsexto, noctavo, ndoceavo};
         Iterator it = mesa.iterator();
         Pieza patron = mesa.firstElement();
-
-
-
         while (it.hasNext()) {
             Pieza p = (Pieza) it.next();
             //Seleccione solo las piezas alineadas a la pieza patron
-
-
             if (p.getX() == patron.getX() && p.getY() == patron.getY()) {
                 // Chequeo que la pieza
                 if (p.getClass().getSimpleName().equals("Medio")) {
                     tipos[0]++;
-
-
                 }
                 if (p.getClass().getSimpleName().equals("Tercio")) {
                     tipos[1]++;
-
-
                 }
                 if (p.getClass().getSimpleName().equals("Cuarto")) {
                     tipos[2]++;
-
-
                 }
                 if (p.getClass().getSimpleName().equals("Sexto")) {
                     tipos[3]++;
-
-
                 }
                 if (p.getClass().getSimpleName().equals("Octavo")) {
                     tipos[4]++;
-
-
                 }
                 if (p.getClass().getSimpleName().equals("Doceavo")) {
                     tipos[5]++;
-
-
                 }
                 patron = p;
-
-
             }
-
         }
         boolean array = false;
         //Compruebo los resultados
-
-
-        for (int i = 0; i
-                < tipos.length; i++) {
+        for (int i = 0; i < tipos.length; i++) {
             if (tipos[i] != atipos[i]) {
                 array = false;
-
-
                 break;
-
-
             } else {
                 array = true;
-
-
             }
         }
         if (array) {
-            new VentanaAnuncio().anuncioEntero("Muy bien¡!Asi se hace¡", this);
+            new VentanaAnuncio(this).anuncioEntero("¡Muy bien¡ !Asi se hace!", this);
             //Activa el premio correspondiente si no fue activado antes
             System.out.println("Combinacion " + enteroschk);
-
-
+            try {
+                this.getClass().getMethod(enteroschk).invoke(this, (Object[]) null);
+            } catch (Exception ex) {
+                System.out.println("NO INVOKE!!" + ex);
+            }
         } else {
-            new VentanaAnuncio().anuncioEntero("Prueba de nuevo", this);
+            new VentanaAnuncio(this).anuncioEntero("Prueba de nuevo", this);
 
         }
 
+    }
+
+    /**
+     * @return the premios
+     */
+    public boolean[] getPremios() {
+        return premios;
+    }
+
+    /**
+     * @return the frame
+     */
+    public JFrame getFrame() {
+        return frame;
     }
 }
