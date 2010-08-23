@@ -36,10 +36,10 @@ class MenuEdu {
         JPanel p = new JPanel();
         p.setBounds(20, frame.getHeight()-120 , frame.getWidth()-50 ,70 );
 
-        JButton b1 = new JButton("Rectangulo");
-        JButton b2 = new JButton("Circulos 1");
-        JButton b3 = new JButton("Circulos 2");
-        JButton b4 = new JButton("Equivalencias");
+        JButton b1 = new JButton("Actividad 1");
+        JButton b2 = new JButton("Actividad 2");
+        JButton b3 = new JButton("Actividad 3");
+        JButton b4 = new JButton("Actividad 4");
         JButton salir = new JButton("Salir");
         b1.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {

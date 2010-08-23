@@ -105,7 +105,7 @@ public class Lienzo extends Canvas implements MouseInputListener {
         g2.setColor(Color.BLACK);
         // Titulo y Cartel de trofeos
         g2.setFont(new Font("Serif", Font.BOLD, 25));
-        g2.drawString("Completar el entero usando cualquier piezas",
+        g2.drawString("Completar el entero usando cualquier pieza",
                 55, 35);
         g2.setFont(new Font("Serif", Font.BOLD, 20));
         g2.drawString("Combinaciones obtenidas:", 20, this.getHeight() - 210);

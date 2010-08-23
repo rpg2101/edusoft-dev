@@ -62,8 +62,6 @@ public class Lienzo extends Canvas implements MouseInputListener {
                 if (check.equals("Cuarto") && (numerador.getText().equals("2")) && (denominador.getText().equals("4"))) {
                     generarTrofeo(check);
                     premios[0] = true;
-                    numerador.setText(null);
-                    denominador.setText(null);
                     ventana("¡Muy Bien! ¡Asi se hace!");
                 } else if (check.equals("Sexto") && (numerador.getText().equals("3")) && (denominador.getText().equals("6"))) {
                     generarTrofeo(check);
@@ -312,6 +310,28 @@ public class Lienzo extends Canvas implements MouseInputListener {
                 f.dispose();
                 numerador.setText("");
                 denominador.setText("");
+                if (premios[0] && premios[1] && premios[2] && premios[3]) {
+                    final JFrame exit = new JFrame();
+                    exit.setTitle("Fracciones");
+                    exit.setBounds(800 / 2 - 100, 600 / 2 - 100, 370, 100);
+                    exit.setResizable(false);
+                    JButton salida = new JButton("Continuar");
+                    salida.setBounds(75, 45, 150, 25);
+                    salida.addActionListener(new ActionListener() {
+
+                        public void actionPerformed(ActionEvent e) {
+                            exit.dispose();
+                            f.dispose();
+                            frame.dispose();
+                        }
+                    });
+                    JLabel lab = new JLabel();
+                    lab.setBounds(35, 3, 330, 50);
+                    lab.setText("¡Lograste formar algunas fracciones equivalentes!");
+                    exit.add(salida);
+                    exit.add(lab);
+                    exit.setVisible(true);
+                }
             }
         });
         p.add(b);
