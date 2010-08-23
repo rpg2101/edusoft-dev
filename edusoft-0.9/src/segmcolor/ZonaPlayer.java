@@ -1,10 +1,12 @@
 package segmcolor;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Vector;
+import java.util.Set;
 import segmcolor.piezas.Pieza;
 
 /**
@@ -14,13 +16,13 @@ import segmcolor.piezas.Pieza;
 public class ZonaPlayer extends Rectangle {
 
     private int cant_enteros;
-    private Vector<Pieza> entero;
+    private Set<Pieza> entero;
     private String nombre;
 
     public ZonaPlayer(int x0, int y0, int ancho, int alto) {
         super(x0, y0, ancho, alto);
         cant_enteros = 0;
-        entero = new Vector();
+        entero = new HashSet<Pieza>();
         nombre = "Jugador";
     }
 
@@ -28,11 +30,15 @@ public class ZonaPlayer extends Rectangle {
         return cant_enteros;
     }
 
-    public void sumaEntero() {
-        cant_enteros++;
+    public Set getEntero(){
+        return entero;
     }
 
-    public void setID(String name){
+    public void resetSetEnteros(){
+        entero.removeAll(entero);
+    }
+
+    public void setID(String name) {
         nombre = name;
     }
 
@@ -45,57 +51,54 @@ public class ZonaPlayer extends Rectangle {
         g.draw(this);
     }
 
-    public void addSegmento(Pieza p) {
-        if (!entero.isEmpty()) {
-            Iterator it = entero.iterator();
-            try {
-                while (it.hasNext()) {
-                    Pieza tmp = (Pieza) it.next();
-                    if (!tmp.equals(p)) {
-                        System.out.println("Añadido " + p + " numero de piezas " + entero.size());
-                        entero.add(p);
-                    }
-                }
-            } catch (Exception e) {
-            }
-        } else {
-            System.out.println("Añadido " + p + " numero de piezas " + entero.size());
-            entero.add(p);
+    public boolean addSegmento(Pieza p) {
+        boolean rt = false;
+        try {
+            rt = entero.add(p);
+        } catch (Exception e) {
         }
+        return rt;
     }
 
-    public void removeSegmento(Pieza p) {
-        Iterator itr = entero.iterator();
-        while (itr.hasNext()) {
-            Pieza tmp = (Pieza) itr.next();
-            if (tmp.equals(p)) {
-                entero.removeElement(p);
-            }
+    public boolean removeSegmento(Pieza p) {
+        boolean rt = false;
+        try {
+            rt = entero.remove(p);
+        } catch (Exception e) {
         }
+        return rt;
     }
 
-    public Vector getEntero() {
-        return entero;
-    }
-
-    private boolean chkEnteros() {
+    public boolean chkEnteros() {
         //Sumo los angulos de las piezas
         int sumaAngulos = 0;
-        Iterator it = entero.iterator();
+        java.awt.Color tmp_color = getColor();
+        Iterator<Pieza> it = entero.iterator();
         while (it.hasNext()) {
-            Pieza p = (Pieza) it.next();
+            Pieza p = it.next();
             //Seleccione solo las piezas alineadas a la pieza patron
             // Chequeo que la pieza
+            if (!tmp_color.equals(p.getColor())) {
+                return false;
+            }
             sumaAngulos = sumaAngulos + p.getAngfinal();
         }
-
         //Preparo la respuesta de la funcion
-        boolean tmp = false;
         if (sumaAngulos == 360) {
-            tmp = true;
+            cant_enteros++;
+            return true;
         }
-
-        // Devuelvo el resultado
-        return tmp;
+        return false;
     }
+
+    private Color getColor() {
+        Iterator<Pieza> it = entero.iterator();
+        return it.next().getColor();
+    }
+    
+    public String getClase() {
+        Iterator<Pieza> it = entero.iterator();
+        return it.next().getClass().getSimpleName();
+    }
+
 }

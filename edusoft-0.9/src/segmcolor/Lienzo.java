@@ -4,7 +4,6 @@
  */
 package segmcolor;
 
-
 import segmcolor.piezas.*;
 import java.awt.BasicStroke;
 import java.awt.Canvas;
@@ -24,13 +23,12 @@ import java.util.Vector;
 import javax.swing.JFrame;
 import javax.swing.event.MouseInputListener;
 
-
-
 /**
  *
  * @author Hector Rattis
  */
 public class Lienzo extends Canvas implements MouseInputListener {
+
     private JFrame frame;
     private Vector<Pieza> piezas;
     private Vector<Pieza> mesa;
@@ -53,7 +51,7 @@ public class Lienzo extends Canvas implements MouseInputListener {
         piezas = new Vector();
         mesa = new Vector();
         zonas = new Vector();
-        piezasEnjuego = 0;
+        piezasEnjuego = 35;
         //Genero las 35 Piezas
         generarPiezas();
 
@@ -80,7 +78,7 @@ public class Lienzo extends Canvas implements MouseInputListener {
         return mesa;
     }
 
-    public Vector<ZonaPlayer> getZonas(){
+    public Vector<ZonaPlayer> getZonas() {
         return zonas;
     }
 
@@ -95,7 +93,7 @@ public class Lienzo extends Canvas implements MouseInputListener {
             tmp.setPosicion(150 + (150 * i), getHeight() / 6);
             mesa.add(tmp);
             repaint();
-            piezasEnjuego++;
+            piezasEnjuego--;
         }
     }
 
@@ -217,7 +215,10 @@ public class Lienzo extends Canvas implements MouseInputListener {
          */
         Iterator mesaitr = mesa.iterator();
         while (mesaitr.hasNext()) {
-            Pieza tmp = (Pieza) mesaitr.next();
+            Pieza tmp;
+            synchronized (this) {
+                tmp = (Pieza) mesaitr.next();
+            }
             if (tmp.segArrastre().contains(me.getX(), me.getY()) && sobrePieza) {
                 tmp.actulizaPosicion(me);
                 sobrePieza = false;
@@ -229,23 +230,33 @@ public class Lienzo extends Canvas implements MouseInputListener {
             for (int i = 0; i < 4; i++) {
                 if (zonas.get(i).contains(tmp.segArrastre())) {
                     alinearSegmZonas(zonas.get(i), tmp);
-                    zonas.get(i).addSegmento(tmp);
-                    piezasEnjuego++;
-                }
-            }
-            Rectangle bigMesa = new Rectangle(20, 50, getWidth() - 40, 280);
-            if (bigMesa.contains(tmp.segArrastre())) {
-                for (int i = 0; i < 4; i++) {
-                    try{
-                    zonas.get(i).removeSegmento(tmp);
-                    piezasEnjuego--;
-                    }catch (Exception e){
-                        
+                    if (zonas.get(i).addSegmento(tmp)) {
+                        piezasEnjuego--;
+                        //Compruebo que forme el entero y de ser así lo remuevo
+                        //de la mesa y de la zona.
+                        try {
+                            if (zonas.get(i).chkEnteros()) {
+                                mesa.removeAll(zonas.get(i).getEntero());
+                                new WinPregunta(this,i);
+                                zonas.get(i).resetSetEnteros();
+                            }
+                        } catch (Exception e) {
+                        }
                     }
                 }
             }
-        }
+            //Si no esta dentro de las zonas de arrastre esta sobre el zona de
+            //juego
+            Rectangle bigMesa = new Rectangle(20, 50, getWidth() - 40, 280);
+            if (bigMesa.contains(me.getX(), me.getY())) {
+                for (int i = 0; i < 4; i++) {
+                    if (zonas.get(i).removeSegmento(tmp)) {
+                        piezasEnjuego++;
+                    }
+                }
+            }
 
+        }
     }
 
     private void generarPiezas() {
@@ -307,7 +318,6 @@ public class Lienzo extends Canvas implements MouseInputListener {
      */
     private void alinearSegmZonas(Rectangle zona, Pieza seg) {
         seg.setPosicion((int) zona.getX() + 10, (int) zona.getY() + 10);
-        this.piezasEnjuego--;
         repaint();
     }
 
@@ -319,7 +329,8 @@ public class Lienzo extends Canvas implements MouseInputListener {
         gBuffer = gb;
     }
 
-    public void setVisibilidad(boolean flg){
+    public void setVisibilidad(boolean flg) {
         frame.setVisible(true);
+        repaint();
     }
 }
