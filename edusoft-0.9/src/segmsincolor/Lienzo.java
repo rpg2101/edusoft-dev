@@ -4,8 +4,6 @@
  */
 package segmsincolor;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import segmsincolor.piezas.*;
 import java.awt.BasicStroke;
 import java.awt.Canvas;

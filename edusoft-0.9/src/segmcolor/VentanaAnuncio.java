@@ -17,10 +17,13 @@ import javax.swing.JPanel;
  */
 public class VentanaAnuncio extends JFrame {
 
-    VentanaAnuncio() {
+    private Lienzo lienzo;
+
+    VentanaAnuncio(Lienzo lz) {
         this.setTitle("Fracciones");
         setBounds(800 / 2 - 100, 600 / 2 - 100, 270, 100);
         setResizable(false);
+        lienzo = lz;
     }
 
     public void anuncioEntero(String mensaje) {
@@ -35,6 +38,9 @@ public class VentanaAnuncio extends JFrame {
 
             public void actionPerformed(ActionEvent ae) {
                 dispose();
+                if (lienzo.getPiezasEnjuego()==0 && lienzo.getPiezas().isEmpty()){
+                lienzo.finjuego();
+                }
             }
         });
         p.add(b);

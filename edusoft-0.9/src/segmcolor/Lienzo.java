@@ -15,12 +15,16 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.Vector;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.event.MouseInputListener;
 
 /**
@@ -89,7 +93,7 @@ public class Lienzo extends Canvas implements MouseInputListener {
     public void repartir() {
         Random gene = new Random();
         for (int i = 0; i < 3; i++) {
-            System.out.println("Cant de p "+piezas.size()+" piezasEnjuego "+piezasEnjuego);
+            System.out.println("Cant de p "+piezas.size()+" piezasEnjuego "+getPiezasEnjuego());
             Pieza tmp = piezas.remove(gene.nextInt(piezas.size()));
             tmp.setPosicion(150 + (150 * i), getHeight() / 6);
             mesa.add(tmp);
@@ -125,7 +129,7 @@ public class Lienzo extends Canvas implements MouseInputListener {
 
         // Titulo
         g.setFont(new Font("Serif", Font.BOLD, 27));
-        g.drawString("Armar enteros usando piezas del mismo color", getX() + 150, getY() + 35);
+        g.drawString("Armar enteros usando piezas del mismo color", 30, getY() + 35);
 
         //Dibujo el recuadro mas grande
         g2.drawRect(20, 50, getWidth() - 40, 280);
@@ -334,5 +338,55 @@ public class Lienzo extends Canvas implements MouseInputListener {
     public void removePiezas(int zona){
         mesa.removeAll(zonas.get(zona).getEntero());
         repaint();
+    }
+
+    void finjuego() {
+        final JFrame j = new JFrame ("Fracciones");
+        j.setBounds(800 / 2 - 100, 600 / 2 - 100, 270, 300);
+        j.setResizable(false);
+        JPanel p = new JPanel();
+        p.setLayout(null);
+        JLabel l = new JLabel();
+        l.setBounds(25, 3, 230, 50);
+        l.setText("Los resultados son :");
+        JLabel p1l = new JLabel();
+        p1l.setBounds(25, 30, 230, 50);
+        p1l.setText(this.getZonas().get(0).getID() + " armaste " + this.getZonas().get(0).getCantEnteros() + " enteros ");
+        JLabel p2l = new JLabel();
+        p2l.setBounds(25, 80, 230, 50);
+        p2l.setText(this.getZonas().get(1).getID() + " armaste " + this.getZonas().get(1).getCantEnteros() + " enteros ");
+        JLabel p3l = new JLabel();
+        p3l.setBounds(25, 130, 230, 50);
+        p3l.setText(this.getZonas().get(2).getID() + " armaste " + this.getZonas().get(2).getCantEnteros() + " enteros ");
+        JLabel p4l = new JLabel();
+        p4l.setBounds(25, 180, 230, 50);
+        p4l.setText(this.getZonas().get(3).getID() + " armaste " + this.getZonas().get(3).getCantEnteros() + " enteros ");
+
+
+        JButton b = new JButton("Continuar");
+        b.setBounds(25, 230, 200, 25);
+        b.addActionListener(new ActionListener() {
+
+            public void actionPerformed(ActionEvent ae) {
+                j.dispose();
+                frame.dispose();
+            }
+        });
+        p.add(b);
+        p.add(l);
+        p.add(p1l);
+        p.add(p2l);
+        p.add(p3l);
+        p.add(p4l);
+
+        j.add(p);
+        j.setVisible(true);
+    }
+
+    /**
+     * @return the piezasEnjuego
+     */
+    public int getPiezasEnjuego() {
+        return piezasEnjuego;
     }
 }

@@ -30,16 +30,20 @@ public class ZonaPlayer extends Rectangle {
         return cant_enteros;
     }
 
-    public Set getEntero(){
+    public Set getEntero() {
         return entero;
     }
 
-    public void resetSetEnteros(){
+    public void resetSetEnteros() {
         entero.removeAll(entero);
     }
 
     public void setID(String name) {
         nombre = name;
+    }
+
+    public String getID() {
+        return nombre;
     }
 
     public void pintarse(Graphics2D g) {
@@ -95,10 +99,9 @@ public class ZonaPlayer extends Rectangle {
         Iterator<Pieza> it = entero.iterator();
         return it.next().getColor();
     }
-    
+
     public String getClase() {
         Iterator<Pieza> it = entero.iterator();
         return it.next().getClass().getSimpleName();
     }
-
 }
