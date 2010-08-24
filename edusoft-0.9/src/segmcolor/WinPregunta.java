@@ -197,8 +197,10 @@ public class WinPregunta extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+        System.out.println(lienzo.getZonas().get(idzona).getClase());
         try {
             this.getClass().getMethod(lienzo.getZonas().get(idzona).getClase()).invoke(this, (Object[]) null);
+            
         } catch (Exception ex) {
             System.out.println("NO INVOKE!!" + ex);
         }
@@ -223,6 +225,12 @@ public class WinPregunta extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void Medio() {
+        if (nmedio.getText().equals(new String("2"))) {
+            this.dispose();
+            VentanaAnuncio va= new VentanaAnuncio(lienzo);
+            va.anuncioEntero("!Muy bien!¡Así se hace!", lienzo);
+            
+        }
     }
 
     private void Tercio() {

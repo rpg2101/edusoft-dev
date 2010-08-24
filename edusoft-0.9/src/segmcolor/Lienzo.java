@@ -13,7 +13,6 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
@@ -125,7 +124,7 @@ public class Lienzo extends Canvas implements MouseInputListener {
 
         // Titulo
         g.setFont(new Font("Serif", Font.BOLD, 27));
-        g.drawString("Armar enteros usando las piezas", getX() + 150, getY() + 35);
+        g.drawString("Armar enteros usando piezas del mismo color", getX() + 150, getY() + 35);
 
         //Dibujo el recuadro mas grande
         g2.drawRect(20, 50, getWidth() - 40, 280);
