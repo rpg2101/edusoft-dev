@@ -16,6 +16,7 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.MouseEvent;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.Vector;
@@ -88,11 +89,11 @@ public class Lienzo extends Canvas implements MouseInputListener {
     public void repartir() {
         Random gene = new Random();
         for (int i = 0; i < 3; i++) {
+            System.out.println("Cant de p "+piezas.size()+" piezasEnjuego "+piezasEnjuego);
             Pieza tmp = piezas.remove(gene.nextInt(piezas.size()));
             tmp.setPosicion(150 + (150 * i), getHeight() / 6);
             mesa.add(tmp);
             repaint();
-            piezasEnjuego--;
         }
     }
 
@@ -214,46 +215,43 @@ public class Lienzo extends Canvas implements MouseInputListener {
          */
         Iterator mesaitr = mesa.iterator();
         while (mesaitr.hasNext()) {
-            Pieza tmp;
             synchronized (this) {
+                Pieza tmp;
                 tmp = (Pieza) mesaitr.next();
-            }
-            if (tmp.segArrastre().contains(me.getX(), me.getY()) && sobrePieza) {
-                tmp.actulizaPosicion(me);
-                sobrePieza = false;
-            } else {
-                tmp.setPressOut(false);
-                sobrePieza = true;
-            }
-            //Alinea piezas a las zonas de juego
-            for (int i = 0; i < 4; i++) {
-                if (zonas.get(i).contains(tmp.segArrastre())) {
-                    alinearSegmZonas(zonas.get(i), tmp);
-                    if (zonas.get(i).addSegmento(tmp)) {
-                        piezasEnjuego--;
-                        //Compruebo que forme el entero y de ser así lo remuevo
-                        //de la mesa y de la zona.
-                        try {
+
+                if (tmp.segArrastre().contains(me.getX(), me.getY()) && sobrePieza) {
+                    tmp.actulizaPosicion(me);
+                    sobrePieza = false;
+                } else {
+                    tmp.setPressOut(false);
+                    sobrePieza = true;
+                }
+                //Alinea piezas a las zonas de juego
+                for (int i = 0; i < 4; i++) {
+                    if (zonas.get(i).contains(tmp.segArrastre())) {
+                        alinearSegmZonas(zonas.get(i), tmp);
+                        if (zonas.get(i).addSegmento(tmp)) {
+                            piezasEnjuego--;
+                            //Compruebo que forme el entero y de ser así lo remuevo
+                            //de la mesa y de la zona.
                             if (zonas.get(i).chkEnteros()) {
-                                mesa.removeAll(zonas.get(i).getEntero());
-                                new WinPregunta(this,i);
-                                zonas.get(i).resetSetEnteros();
+                                new WinPregunta(this, i);
                             }
-                        } catch (Exception e) {
                         }
                     }
                 }
-            }
-            //Si no esta dentro de las zonas de arrastre esta sobre el zona de
-            //juego
-            Rectangle bigMesa = new Rectangle(20, 50, getWidth() - 40, 280);
-            if (bigMesa.contains(me.getX(), me.getY())) {
-                for (int i = 0; i < 4; i++) {
-                    if (zonas.get(i).removeSegmento(tmp)) {
-                        piezasEnjuego++;
+
+                //Si no esta dentro de las zonas de arrastre esta sobre el zona de
+                //juego
+                Rectangle bigMesa = new Rectangle(20, 50, getWidth() - 40, 280);
+                if (bigMesa.contains(me.getX(), me.getY())) {
+                    for (int i = 0; i < 4; i++) {
+                        if (zonas.get(i).removeSegmento(tmp)) {
+                            piezasEnjuego++;
+                        }
                     }
                 }
-            }
+            } 
 
         }
     }
@@ -330,6 +328,11 @@ public class Lienzo extends Canvas implements MouseInputListener {
 
     public void setVisibilidad(boolean flg) {
         frame.setVisible(true);
+        repaint();
+    }
+
+    public void removePiezas(int zona){
+        mesa.removeAll(zonas.get(zona).getEntero());
         repaint();
     }
 }

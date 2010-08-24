@@ -17,18 +17,13 @@ import javax.swing.JPanel;
  */
 public class VentanaAnuncio extends JFrame {
 
-    VentanaAnuncio ventana;
-    Lienzo lienzo;
-
-    public VentanaAnuncio(Lienzo lz) {
+    VentanaAnuncio() {
         this.setTitle("Fracciones");
         setBounds(800 / 2 - 100, 600 / 2 - 100, 270, 100);
         setResizable(false);
-        lienzo = lz;
-        ventana = this;
     }
 
-    public void anuncioEntero(String mensaje, final Lienzo lz) {
+    public void anuncioEntero(String mensaje) {
         JPanel p = new JPanel();
         p.setLayout(null);
         JLabel l = new JLabel();
@@ -39,9 +34,7 @@ public class VentanaAnuncio extends JFrame {
         b.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent ae) {
-                
                 dispose();
-
             }
         });
         p.add(b);
@@ -51,7 +44,4 @@ public class VentanaAnuncio extends JFrame {
 
     }
 
-    public void pregunta(Lienzo lz,int idzona) {
-        new WinPregunta(lz,idzona);
-    }
 }

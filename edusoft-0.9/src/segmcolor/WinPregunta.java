@@ -197,10 +197,9 @@ public class WinPregunta extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
-        System.out.println(lienzo.getZonas().get(idzona).getClase());
         try {
             this.getClass().getMethod(lienzo.getZonas().get(idzona).getClase()).invoke(this, (Object[]) null);
-            
+
         } catch (Exception ex) {
             System.out.println("NO INVOKE!!" + ex);
         }
@@ -224,28 +223,69 @@ public class WinPregunta extends javax.swing.JFrame {
     private javax.swing.JTextField ntercio;
     // End of variables declaration//GEN-END:variables
 
-    private void Medio() {
+    public void Medio() {
         if (nmedio.getText().equals(new String("2"))) {
+            new VentanaAnuncio().anuncioEntero("!Muy bien!¡Así se hace!");
+            lienzo.removePiezas(idzona);
+            lienzo.getZonas().get(idzona).resetSetEnteros();
             this.dispose();
-            VentanaAnuncio va= new VentanaAnuncio(lienzo);
-            va.anuncioEntero("!Muy bien!¡Así se hace!", lienzo);
-            
+        } else {
+            new VentanaAnuncio().anuncioEntero("Prueba de nuevo");
         }
     }
 
-    private void Tercio() {
+    public void Tercio() {
+        if (ntercio.getText().equals(new String("3"))) {
+            new VentanaAnuncio().anuncioEntero("!Muy bien!¡Así se hace!");
+            lienzo.removePiezas(idzona);
+            lienzo.getZonas().get(idzona).resetSetEnteros();
+            this.dispose();
+        } else {
+            new VentanaAnuncio().anuncioEntero("Prueba de nuevo");
+        }
     }
 
-    private void Cuarto() {
+    public void Cuarto() {
+        if (ncuarto.getText().equals(new String("4"))) {
+            new VentanaAnuncio().anuncioEntero("!Muy bien!¡Así se hace!");
+            lienzo.removePiezas(idzona);
+            lienzo.getZonas().get(idzona).resetSetEnteros();
+            this.dispose();
+        } else {
+            new VentanaAnuncio().anuncioEntero("Prueba de nuevo");
+        }
     }
 
-    private void Sexto() {
+    public void Sexto() {
+        if (nsexto.getText().equals(new String("6"))) {
+            new VentanaAnuncio().anuncioEntero("!Muy bien!¡Así se hace!");
+            lienzo.removePiezas(idzona);
+            lienzo.getZonas().get(idzona).resetSetEnteros();
+            this.dispose();
+        } else {
+            new VentanaAnuncio().anuncioEntero("Prueba de nuevo");
+        }
     }
 
-    private void Octavo() {
+    public void Octavo() {
+        if (noctavo.getText().equals(new String("8"))) {
+            new VentanaAnuncio().anuncioEntero("!Muy bien!¡Así se hace!");
+            lienzo.removePiezas(idzona);
+            lienzo.getZonas().get(idzona).resetSetEnteros();
+            this.dispose();
+        } else {
+            new VentanaAnuncio().anuncioEntero("Prueba de nuevo");
+        }
     }
 
-    private void Doceavo() {
+    public void Doceavo() {
+        if (ndoceavo.getText().equals(new String("12"))) {
+            new VentanaAnuncio().anuncioEntero("!Muy bien!¡Así se hace!");
+            lienzo.removePiezas(idzona);
+            lienzo.getZonas().get(idzona).resetSetEnteros();
+            this.dispose();
+        } else {
+            new VentanaAnuncio().anuncioEntero("Prueba de nuevo");
+        }
     }
 }
-
