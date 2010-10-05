@@ -36,10 +36,10 @@ class MenuEdu {
         JPanel p = new JPanel();
         p.setBounds(20, frame.getHeight()-120 , frame.getWidth()-50 ,70 );
 
-        JButton b1 = new JButton("Actividad 1");
-        JButton b2 = new JButton("Actividad 2");
-        JButton b3 = new JButton("Actividad 3");
-        JButton b4 = new JButton("Actividad 4");
+        JButton b1 = new JButton("Plegado");
+        JButton b2 = new JButton("Armando enteros");
+        JButton b3 = new JButton("Rompecabezas del uno");
+        JButton b4 = new JButton("Equivalentes");
         JButton salir = new JButton("Salir");
         b1.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -48,17 +48,19 @@ class MenuEdu {
         });
         b2.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                SegSC ssc = new SegSC ();
+                SegMain m = new SegMain();
+
             }
         });
         b3.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                SegMain m = new SegMain();
+            SegSC ssc = new SegSC ();
             }
         });
         b4.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 Equivalencia eq = new Equivalencia();
+            
             }
         });
         salir.addActionListener(new ActionListener() {
